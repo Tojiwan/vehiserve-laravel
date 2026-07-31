@@ -73,6 +73,9 @@ class DocumentList extends Component
 
     public function render()
     {
-        return view('livewire.user.document-list');
+        return view('livewire.user.document-list', [
+            'vehicleRequests' => $this->vehicleRequests,
+            'travelRequests' => $this->travelRequests,
+        ]);
     }
 }

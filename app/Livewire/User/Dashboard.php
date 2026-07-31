@@ -47,6 +47,11 @@ class Dashboard extends Component
 
     public function render()
     {
-        return view('livewire.user.dashboard');
+        return view('livewire.user.dashboard', [
+            'vehicleStats' => $this->vehicleStats,
+            'travelStats' => $this->travelStats,
+            'recentVehicleRequests' => $this->recentVehicleRequests,
+            'recentTravelRequests' => $this->recentTravelRequests,
+        ]);
     }
 }

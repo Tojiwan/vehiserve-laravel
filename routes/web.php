@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DocumentDownloadController;
+use App\Http\Controllers\Admin\UsersController;
 use App\Livewire\User\Dashboard;
 use App\Livewire\User\VehicleRequestForm;
 use App\Livewire\User\TravelRequestForm;
@@ -79,19 +80,80 @@ Route::middleware(['auth', 'verified'])->group(function () {
 // Admin routes
 Route::middleware(['auth', 'verified', 'can:access-admin-panel'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
-    // Add more admin routes here
+    
+    // User Management
+    Route::get('/users', fn() => view('admin.users.index'))->name('users.index');
+    Route::get('/users/create', fn() => view('admin.users.create'))->name('users.create');
+    Route::get('/users/{user}/edit', fn() => view('admin.users.edit'))->name('users.edit');
+    
+    // Vehicle Management
+    Route::get('/vehicles', fn() => view('admin.vehicles.index'))->name('vehicles.index');
+    Route::get('/vehicles/create', fn() => view('admin.vehicles.create'))->name('vehicles.create');
+    Route::get('/vehicles/{vehicle}/edit', fn() => view('admin.vehicles.edit'))->name('vehicles.edit');
+    
+    // Driver Management
+    Route::get('/drivers', fn() => view('admin.drivers.index'))->name('drivers.index');
+    Route::get('/drivers/create', fn() => view('admin.drivers.create'))->name('drivers.create');
+    Route::get('/drivers/{driver}/edit', fn() => view('admin.drivers.edit'))->name('drivers.edit');
+    
+    // Reports
+    Route::get('/reports', fn() => view('admin.reports'))->name('reports');
+    Route::get('/reports/vehicle-usage', fn() => view('admin.reports.vehicle-usage'))->name('reports.vehicle-usage');
+    Route::get('/reports/driver-performance', fn() => view('admin.reports.driver-performance'))->name('reports.driver-performance');
+    
+    // Audit Logs
+    Route::get('/audit-logs', fn() => view('admin.audit-logs'))->name('audit-logs');
+    
+    // System Settings
+    Route::get('/settings', fn() => view('admin.settings'))->name('settings');
 });
 
 // Staff routes
 Route::middleware(['auth', 'verified', 'can:access-staff-panel'])->prefix('staff')->name('staff.')->group(function () {
     Route::get('/dashboard', fn() => view('staff.dashboard'))->name('dashboard');
-    // Add more staff routes here
+    
+    // Approval Queue
+    Route::get('/approval-queue', fn() => view('staff.approval-queue'))->name('approval-queue');
+    Route::get('/approval-detail/{type}/{id}', fn() => view('staff.approval-detail'))->name('approval-detail');
+    
+    // Vehicle Management
+    Route::get('/vehicles', fn() => view('staff.vehicles.index'))->name('vehicles.index');
+    Route::get('/vehicles/create', fn() => view('staff.vehicles.create'))->name('vehicles.create');
+    Route::get('/vehicles/{vehicle}/edit', fn() => view('staff.vehicles.edit'))->name('vehicles.edit');
+    
+    // Driver Management
+    Route::get('/drivers', fn() => view('staff.drivers.index'))->name('drivers.index');
+    Route::get('/drivers/create', fn() => view('staff.drivers.create'))->name('drivers.create');
+    Route::get('/drivers/{driver}/edit', fn() => view('staff.drivers.edit'))->name('drivers.edit');
+    
+    // Calendar & Schedules
+    Route::get('/calendar', fn() => view('staff.calendar'))->name('calendar');
+    Route::get('/schedule', fn() => view('staff.schedule'))->name('schedule');
+    
+    // Trips
+    Route::get('/trips', fn() => view('staff.trips.index'))->name('trips.index');
+    
+    // Attendance
+    Route::get('/attendance', fn() => view('staff.attendance'))->name('attendance');
+    Route::get('/attendance/report', fn() => view('staff.attendance-report'))->name('attendance-report');
+    
+    // Reminders
+    Route::get('/reminders', fn() => view('staff.reminders'))->name('reminders');
 });
 
 // Approver routes (Dean, VP, SUC)
 Route::middleware(['auth', 'verified', 'can:access-approver-panel'])->prefix('approver')->name('approver.')->group(function () {
     Route::get('/dashboard', fn() => view('approver.dashboard'))->name('dashboard');
-    // Add more approver routes here
+    
+    // Approval Queue
+    Route::get('/queue', fn() => view('approver.queue'))->name('queue');
+    Route::get('/review/{type}/{id}', fn() => view('approver.review'))->name('review');
+    
+    // History
+    Route::get('/history', fn() => view('approver.history'))->name('history');
+    
+    // Settings
+    Route::get('/settings', fn() => view('approver.settings'))->name('settings');
 });
 
 require __DIR__.'/auth.php';
