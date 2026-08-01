@@ -17,6 +17,9 @@ class VehicleRequestForm extends Component
 {
     use WithFileUploads;
 
+    public $sidebarOpen = false;
+    public $sidebarCollapsed = false;
+
     public $request_date;
     public $requesting_person;
     public $office_college = '';
@@ -24,6 +27,7 @@ class VehicleRequestForm extends Component
     public $purpose;
     public $departure_date;
     public $departure_time;
+    public $return_date;
     public $num_passengers = 1;
     public $passengers = [];
     public $signature;
@@ -57,6 +61,7 @@ class VehicleRequestForm extends Component
         'purpose' => 'required|string|max:1000',
         'departure_date' => 'required|date|after_or_equal:request_date',
         'departure_time' => 'required',
+        'return_date' => 'required|date|after_or_equal:departure_date',
         'num_passengers' => 'required|integer|min:1|max:50',
         'passengers.*' => 'nullable|string|max:255',
         'signature' => 'nullable|file|mimes:jpg,jpeg,png|max:2048',
@@ -67,12 +72,14 @@ class VehicleRequestForm extends Component
     protected $messages = [
         'request_date.after_or_equal' => 'Request date must be today or in the future.',
         'departure_date.after_or_equal' => 'Departure date must be on or after request date.',
+        'return_date.after_or_equal' => 'Return date must be on or after departure date.',
     ];
 
     public function mount(): void
     {
         $this->request_date = now()->format('Y-m-d');
         $this->departure_date = now()->format('Y-m-d');
+        $this->return_date = now()->format('Y-m-d');
         $this->departure_time = '08:00';
         $this->initializePassengers();
     }
@@ -114,6 +121,7 @@ class VehicleRequestForm extends Component
             'purpose' => $this->purpose,
             'departure_date' => $this->departure_date,
             'departure_time' => $this->departure_time,
+            'return_date' => $this->return_date,
             'num_passengers' => $this->num_passengers,
         ];
 

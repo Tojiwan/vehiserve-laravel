@@ -260,7 +260,7 @@ class ApprovalWorkflowService
                 'destination' => $request->destination,
                 'status' => 'Booked',
                 'date' => $request->departure_date,
-                'return_date' => $request->departure_date, // Would need return date from request
+                'return_date' => $request->return_date,
             ]);
 
             $request->update(['vehicle_status' => VehicleRequestStatus::COMPLETED->value]);

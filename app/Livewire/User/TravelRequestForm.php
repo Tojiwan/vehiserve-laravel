@@ -15,6 +15,9 @@ class TravelRequestForm extends Component
 {
     use WithFileUploads;
 
+    public $sidebarOpen = false;
+    public $sidebarCollapsed = false;
+
     public $personnel_name;
     public $official_station;
     public $destination;

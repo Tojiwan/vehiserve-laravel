@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('attendances', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('driver_ID')->constrained('drivers', 'driver_ID')->onDelete('cascade');
+            $table->date('date');
+            $table->time('time_in')->nullable();
+            $table->time('time_out')->nullable();
+            $table->enum('status', ['Present', 'Absent', 'Late', 'On Leave'])->default('Present');
             $table->timestamps();
         });
     }

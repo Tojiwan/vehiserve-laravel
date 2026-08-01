@@ -10,19 +10,12 @@ return new class extends Migration
     {
         Schema::create('approvals', function (Blueprint $table) {
             $table->id();
-            $table->morphs('approvable'); // vehicle_requests or travel_requests
-            $table->foreignId('user_ID')->constrained('users')->onDelete('cascade'); // the approver
-            $table->enum('role', ['Motor Pool', 'Dean', 'Vice President', 'SUC President']);
-            $table->enum('status', [
-                'Pending',
-                'Approved',
-                'Rejected',
-                'Vehicle Available',
-                'No Vehicle Available',
-                'Cancelled by User'
-            ])->default('Pending');
+            $table->morphs('approvable');
+            $table->foreignId('user_ID')->nullable()->constrained('users')->nullOnDelete();
+            $table->string('role');
+            $table->string('status');
             $table->text('comment')->nullable();
-            $table->string('signature')->nullable(); // digital signature filename
+            $table->string('signature')->nullable();
             $table->timestamp('approved_at')->nullable();
             $table->timestamps();
         });

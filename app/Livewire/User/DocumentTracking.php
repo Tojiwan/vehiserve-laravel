@@ -15,6 +15,9 @@ class DocumentTracking extends Component
 {
     use WithPagination;
 
+    public $sidebarOpen = false;
+    public $sidebarCollapsed = false;
+
     public $vehicleSearch = '';
     public $travelSearch = '';
     public $vehicleSortField = 'created_at';

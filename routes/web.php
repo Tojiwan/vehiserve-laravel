@@ -82,19 +82,13 @@ Route::middleware(['auth', 'verified', 'can:access-admin-panel'])->prefix('admin
     Route::get('/dashboard', fn() => view('admin.dashboard'))->name('dashboard');
     
     // User Management
-    Route::get('/users', fn() => view('admin.users.index'))->name('users.index');
-    Route::get('/users/create', fn() => view('admin.users.create'))->name('users.create');
-    Route::get('/users/{user}/edit', fn() => view('admin.users.edit'))->name('users.edit');
+    Route::resource('users', \App\Http\Controllers\Admin\UsersController::class)->names('users');
     
     // Vehicle Management
-    Route::get('/vehicles', fn() => view('admin.vehicles.index'))->name('vehicles.index');
-    Route::get('/vehicles/create', fn() => view('admin.vehicles.create'))->name('vehicles.create');
-    Route::get('/vehicles/{vehicle}/edit', fn() => view('admin.vehicles.edit'))->name('vehicles.edit');
+    Route::resource('vehicles', \App\Http\Controllers\Admin\VehicleController::class)->names('vehicles');
     
     // Driver Management
-    Route::get('/drivers', fn() => view('admin.drivers.index'))->name('drivers.index');
-    Route::get('/drivers/create', fn() => view('admin.drivers.create'))->name('drivers.create');
-    Route::get('/drivers/{driver}/edit', fn() => view('admin.drivers.edit'))->name('drivers.edit');
+    Route::resource('drivers', \App\Http\Controllers\Admin\DriverController::class)->names('drivers');
     
     // Reports
     Route::get('/reports', fn() => view('admin.reports'))->name('reports');
@@ -110,21 +104,17 @@ Route::middleware(['auth', 'verified', 'can:access-admin-panel'])->prefix('admin
 
 // Staff routes
 Route::middleware(['auth', 'verified', 'can:access-staff-panel'])->prefix('staff')->name('staff.')->group(function () {
-    Route::get('/dashboard', fn() => view('staff.dashboard'))->name('dashboard');
+    Route::get('/dashboard', \App\Livewire\Staff\Dashboard::class)->name('dashboard');
     
     // Approval Queue
     Route::get('/approval-queue', fn() => view('staff.approval-queue'))->name('approval-queue');
     Route::get('/approval-detail/{type}/{id}', fn() => view('staff.approval-detail'))->name('approval-detail');
     
     // Vehicle Management
-    Route::get('/vehicles', fn() => view('staff.vehicles.index'))->name('vehicles.index');
-    Route::get('/vehicles/create', fn() => view('staff.vehicles.create'))->name('vehicles.create');
-    Route::get('/vehicles/{vehicle}/edit', fn() => view('staff.vehicles.edit'))->name('vehicles.edit');
+    Route::resource('vehicles', \App\Http\Controllers\Staff\VehicleController::class)->names('vehicles');
     
     // Driver Management
-    Route::get('/drivers', fn() => view('staff.drivers.index'))->name('drivers.index');
-    Route::get('/drivers/create', fn() => view('staff.drivers.create'))->name('drivers.create');
-    Route::get('/drivers/{driver}/edit', fn() => view('staff.drivers.edit'))->name('drivers.edit');
+    Route::resource('drivers', \App\Http\Controllers\Staff\DriverController::class)->names('drivers');
     
     // Calendar & Schedules
     Route::get('/calendar', fn() => view('staff.calendar'))->name('calendar');

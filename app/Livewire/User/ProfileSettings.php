@@ -14,6 +14,9 @@ class ProfileSettings extends Component
 {
     use WithFileUploads;
 
+    public $sidebarOpen = false;
+    public $sidebarCollapsed = false;
+
     public $name;
     public $email;
     public $avatar;

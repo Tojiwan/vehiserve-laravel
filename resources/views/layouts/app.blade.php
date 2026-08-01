@@ -19,7 +19,10 @@
     @livewireStyles
 </head>
 <body class="font-['Poppins'] bg-gray-50">
-    @yield('content')
+    {{ $slot ?? '' }}
+    @if (!isset($slot) || $slot === '')
+        @yield('content')
+    @endif
 
     <!-- Confirm Modal (Global) -->
     @livewire('shared.confirm-modal')

@@ -97,6 +97,13 @@
                 </div>
             </div>
 
+            <!-- Return Date -->
+            <div class="form-group">
+                <label class="label" for="return_date">Return Date <span class="text-red-500">*</span></label>
+                <input type="date" id="return_date" wire:model="return_date" class="input" required>
+                @error('return_date') <p class="error-message">{{ $message }}</p> @enderror
+            </div>
+
             <!-- File Uploads -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <!-- Signature -->

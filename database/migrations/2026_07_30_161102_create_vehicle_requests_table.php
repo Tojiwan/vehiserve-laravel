@@ -18,6 +18,7 @@ return new class extends Migration
             $table->text('purpose');
             $table->date('departure_date');
             $table->time('departure_time');
+            $table->date('return_date')->nullable();
             $table->string('signature')->nullable(); // signature image filename
             $table->string('valid_id')->nullable(); // valid_id image filename
             $table->integer('num_passengers')->default(1);

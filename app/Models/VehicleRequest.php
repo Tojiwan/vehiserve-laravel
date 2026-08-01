@@ -25,6 +25,7 @@ class VehicleRequest extends Model implements HasMedia
         'purpose',
         'departure_date',
         'departure_time',
+        'return_date',
         'signature',
         'valid_id',
         'num_passengers',
@@ -34,6 +35,7 @@ class VehicleRequest extends Model implements HasMedia
     protected $casts = [
         'request_date' => 'date',
         'departure_date' => 'date',
+        'return_date' => 'date',
         'departure_time' => 'datetime:H:i',
     ];
 

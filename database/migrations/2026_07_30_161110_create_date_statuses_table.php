@@ -13,6 +13,9 @@ return new class extends Migration
     {
         Schema::create('date_statuses', function (Blueprint $table) {
             $table->id();
+            $table->date('date');
+            $table->enum('status', ['Open', 'Closed', 'Holiday', 'Maintenance'])->default('Open');
+            $table->text('description')->nullable();
             $table->timestamps();
         });
     }

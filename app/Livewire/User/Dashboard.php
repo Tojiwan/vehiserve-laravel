@@ -12,6 +12,9 @@ use App\Services\TravelRequestService;
 #[Layout('layouts.user')]
 class Dashboard extends Component
 {
+    public $sidebarOpen = false;
+    public $sidebarCollapsed = false;
+
     public $vehicleStats = [];
     public $travelStats = [];
     public $recentVehicleRequests = [];

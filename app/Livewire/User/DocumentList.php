@@ -16,6 +16,9 @@ class DocumentList extends Component
 {
     use WithPagination;
 
+    public $sidebarOpen = false;
+    public $sidebarCollapsed = false;
+
     public $vehicleSearch = '';
     public $travelSearch = '';
 
