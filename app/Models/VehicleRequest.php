@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Activitylog\Models\Concerns\LogsActivity;
-use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Support\LogOptions;
 
 class VehicleRequest extends Model implements HasMedia
 {
@@ -64,7 +64,7 @@ class VehicleRequest extends Model implements HasMedia
         return LogOptions::defaults()
             ->logOnly(['vehicle_status', 'request_date', 'destination'])
             ->logOnlyDirty()
-            ->dontSubmitEmptyLogs();
+            ->dontLogEmptyChanges();
     }
 
     public function getMediaCollections(): array

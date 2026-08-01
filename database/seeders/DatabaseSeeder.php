@@ -2,9 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use Illuminate\Database\Seeder;
-use Spatie\Permission\Models\Role;
 
 class DatabaseSeeder extends Seeder
 {
@@ -52,19 +50,26 @@ class DatabaseSeeder extends Seeder
                 'password' => bcrypt('password'),
                 'role' => 'SUC',
             ],
-[
-    'name' => 'Super Admin',
-    'email' => 'superadmin@test.com',
-    'password' => bcrypt('password'),
-    'role' => 'Super Admin',
-],
+            [
+                'name' => 'Super Admin',
+                'email' => 'superadmin@test.com',
+                'password' => bcrypt('password'),
+                'role' => 'Super Admin',
+            ],
         ];
 
         foreach ($users as $userData) {
             $role = $userData['role'];
             unset($userData['role']);
-            $user = User::firstOrCreate(['email' => $userData['email']], $userData);
+            $user = \App\Models\User::firstOrCreate(['email' => $userData['email']], $userData);
             $user->assignRole($role);
         }
+
+        $this->call([
+            VehicleSeeder::class,
+            DriverSeeder::class,
+            VehicleRequestSeeder::class,
+            TravelRequestSeeder::class,
+        ]);
     }
 }

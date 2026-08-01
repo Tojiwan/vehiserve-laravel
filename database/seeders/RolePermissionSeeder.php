@@ -171,6 +171,70 @@ class RolePermissionSeeder extends Seeder
             'reject travel requests',
         ]);
 
+        $motorPool = Role::firstOrCreate(['name' => 'Motor Pool', 'guard_name' => 'web']);
+        $motorPool->syncPermissions([
+            'view all vehicle requests',
+            'view all travel requests',
+            'view document tracking',
+            'view all documents',
+            'approve vehicle requests',
+            'reject vehicle requests',
+            'assign vehicle driver',
+            'view vehicles',
+            'create vehicles',
+            'edit vehicles',
+            'delete vehicles',
+            'manage vehicle status',
+            'view drivers',
+            'create drivers',
+            'edit drivers',
+            'delete drivers',
+        ]);
+
+        $vicePresident = Role::firstOrCreate(['name' => 'Vice President', 'guard_name' => 'web']);
+        $vicePresident->syncPermissions([
+            'view all vehicle requests',
+            'view all travel requests',
+            'view document tracking',
+            'view all documents',
+            'approve vehicle requests',
+            'reject vehicle requests',
+            'approve travel requests',
+            'reject travel requests',
+        ]);
+
+        $sucPresident = Role::firstOrCreate(['name' => 'SUC President', 'guard_name' => 'web']);
+        $sucPresident->syncPermissions([
+            'view all vehicle requests',
+            'view all travel requests',
+            'view document tracking',
+            'view all documents',
+            'approve vehicle requests',
+            'reject vehicle requests',
+            'approve travel requests',
+            'reject travel requests',
+        ]);
+
+        $motorPoolFinal = Role::firstOrCreate(['name' => 'Motor Pool (Final)', 'guard_name' => 'web']);
+        $motorPoolFinal->syncPermissions([
+            'view all vehicle requests',
+            'view all travel requests',
+            'view document tracking',
+            'view all documents',
+            'approve vehicle requests',
+            'reject vehicle requests',
+            'assign vehicle driver',
+            'view vehicles',
+            'create vehicles',
+            'edit vehicles',
+            'delete vehicles',
+            'manage vehicle status',
+            'view drivers',
+            'create drivers',
+            'edit drivers',
+            'delete drivers',
+        ]);
+
         $superAdmin = Role::firstOrCreate(['name' => 'Super Admin', 'guard_name' => 'web']);
         $superAdmin->syncPermissions(Permission::all());
     }
