@@ -12,8 +12,7 @@
     </button>
 
     <!-- Notification Dropdown -->
-    @if ($show)
-    <div class="dropdown-menu w-96 right-0" wire:click.outside="show = false">
+    <div class="dropdown-menu w-96 right-0" x-show="$wire.show" x-transition:enter="transition ease-out duration-100" x-transition:leave="transition ease-in duration-75" wire:click.outside="$wire.show = false" x-cloak>
         <div class="flex items-center justify-between px-4 py-3 border-b border-gray-100">
             <h3 class="font-semibold text-gray-900">Notifications</h3>
             @if ($unreadCount > 0)
@@ -55,5 +54,4 @@
         </div>
         @endif
     </div>
-    @endif
 </div>

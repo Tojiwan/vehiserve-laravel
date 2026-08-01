@@ -18,11 +18,11 @@
     @livewireScripts
     @livewireStyles
 </head>
-<body class="font-['Poppins'] bg-gray-50">
+<body class="font-['Poppins'] bg-gray-50" x-data="sidebar">
     <!-- Header -->
     <header class="header">
         <div class="flex items-center gap-4">
-            <button wire:click="$dispatch('sidebar-toggle')" class="lg:hidden btn btn-ghost btn-icon">
+            <button x-on:click="openSidebar()" class="lg:hidden btn btn-ghost btn-icon" aria-label="Open sidebar">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
                 </svg>
@@ -38,8 +38,8 @@
             @livewire('shared.notification-dropdown')
 
             <!-- User Menu -->
-            <div class="relative">
-                <button wire:click="$dispatch('user-menu-toggle')" class="flex items-center gap-2 btn btn-ghost">
+            <div class="relative" x-data="userMenu">
+                <button x-on:click="toggle()" class="flex items-center gap-2 btn btn-ghost">
                     <div class="avatar avatar-md">
                         @if (auth()->user()->getFirstMediaUrl('avatar'))
                             <img src="{{ auth()->user()->getFirstMediaUrl('avatar') }}" alt="{{ auth()->user()->name }}" class="w-full h-full object-cover">
@@ -54,8 +54,7 @@
                 </button>
 
                 <!-- User Dropdown -->
-                @if (session('user-menu-open'))
-                <div class="dropdown-menu" wire:click.outside="$dispatch('user-menu-close')">
+                <div x-show="open" x-transition:enter="transition ease-out duration-100" x-transition:leave="transition ease-in duration-75" class="dropdown-menu" x-on:click.outside="close()">
                     <a href="{{ route('user.profile') }}" class="dropdown-item">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
@@ -80,13 +79,12 @@
                         </button>
                     </form>
                 </div>
-                @endif
             </div>
         </div>
     </header>
 
     <!-- Sidebar -->
-    <aside class="sidebar" wire:class="{ 'collapsed': sidebarCollapsed }" :class="{ 'lg:translate-x-0': !sidebarCollapsed, '-translate-x-full': sidebarCollapsed }">
+    <aside class="sidebar" x-bind:class="{ 'collapsed': collapsed }" x-bind:class="{ 'lg:translate-x-0': !collapsed, '-translate-x-full': collapsed }">
         <div class="flex flex-col h-full">
             <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
                 <a href="{{ route('user.dashboard') }}" class="sidebar-link {{ request()->routeIs('user.dashboard') ? 'active' : '' }}">
@@ -148,10 +146,10 @@
     </aside>
 
     <!-- Sidebar Overlay (Mobile) -->
-    <div class="fixed inset-0 bg-black/50 z-30 lg:hidden" wire:click="$dispatch('sidebar-close')" :class="{ 'hidden': !sidebarOpen }"></div>
+    <div class="fixed inset-0 bg-black/50 z-30 lg:hidden" x-on:click="closeSidebar()" x-show="open" x-transition:enter="transition ease-in-out duration-150" x-transition:leave="transition ease-in-out duration-150" x-cloak></div>
 
     <!-- Main Content -->
-    <main class="page-container" wire:class="{ 'lg:pl-16': sidebarCollapsed, 'lg:pl-64': !sidebarCollapsed }">
+    <main class="page-container" x-bind:class="{ 'lg:pl-16': collapsed, 'lg:pl-64': !collapsed }">
         <div class="page-content">
             {{ $slot }}
         </div>

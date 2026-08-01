@@ -9,6 +9,8 @@ use App\Livewire\User\TravelRequestForm;
 use App\Livewire\User\DocumentTracking;
 use App\Livewire\User\DocumentList;
 use App\Livewire\User\ProfileSettings;
+use App\Livewire\User\NotificationsIndex;
+use App\Livewire\User\DocumentTrackingDetail;
 use Illuminate\Support\Facades\Route;
 
 // Home redirect
@@ -57,10 +59,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         
         // Document Tracking
         Route::get('/document-tracking', DocumentTracking::class)->name('document-tracking');
-        // Route::get('/document-tracking/{type}/{id}', \App\Livewire\User\DocumentTrackingDetail::class)->name('document-tracking.detail');
+        Route::get('/document-tracking/{type}/{id}', DocumentTrackingDetail::class)->name('document-tracking.detail');
         
         // Documents List
         Route::get('/documents', DocumentList::class)->name('documents');
+
+        // Notifications
+        Route::get('/notifications', NotificationsIndex::class)->name('notifications.index');
         
         // Profile
         Route::get('/profile', ProfileSettings::class)->name('profile');
