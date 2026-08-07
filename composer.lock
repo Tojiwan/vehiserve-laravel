@@ -951,21 +951,21 @@
         },
         {
             "name": "guzzlehttp/guzzle",
-            "version": "7.15.3",
+            "version": "7.15.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/guzzle.git",
-                "reference": "ae311b8f045ea93ce7b1c9cdb7cec06c53f944bc"
+                "reference": "744101956d78b7c1384d0cbf379db13e859167bf"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/ae311b8f045ea93ce7b1c9cdb7cec06c53f944bc",
-                "reference": "ae311b8f045ea93ce7b1c9cdb7cec06c53f944bc",
+                "url": "https://api.github.com/repos/guzzle/guzzle/zipball/744101956d78b7c1384d0cbf379db13e859167bf",
+                "reference": "744101956d78b7c1384d0cbf379db13e859167bf",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "guzzlehttp/promises": "^2.5.2",
+                "guzzlehttp/promises": "^2.5.1",
                 "guzzlehttp/psr7": "^2.13",
                 "php": "^7.2.5 || ^8.0",
                 "psr/http-client": "^1.0",
@@ -1059,7 +1059,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/guzzle/issues",
-                "source": "https://github.com/guzzle/guzzle/tree/7.15.3"
+                "source": "https://github.com/guzzle/guzzle/tree/7.15.2"
             },
             "funding": [
                 {
@@ -1075,20 +1075,20 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-08-05T19:48:21+00:00"
+            "time": "2026-07-26T23:23:20+00:00"
         },
         {
             "name": "guzzlehttp/promises",
-            "version": "2.5.2",
+            "version": "2.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/guzzle/promises.git",
-                "reference": "2823687acff28b2dbe67b2508a6b300e2c3fa4ce"
+                "reference": "9ad1e4fc607446a055b95870c7f668e93b5cff29"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/guzzle/promises/zipball/2823687acff28b2dbe67b2508a6b300e2c3fa4ce",
-                "reference": "2823687acff28b2dbe67b2508a6b300e2c3fa4ce",
+                "url": "https://api.github.com/repos/guzzle/promises/zipball/9ad1e4fc607446a055b95870c7f668e93b5cff29",
+                "reference": "9ad1e4fc607446a055b95870c7f668e93b5cff29",
                 "shasum": ""
             },
             "require": {
@@ -1143,7 +1143,7 @@
             ],
             "support": {
                 "issues": "https://github.com/guzzle/promises/issues",
-                "source": "https://github.com/guzzle/promises/tree/2.5.2"
+                "source": "https://github.com/guzzle/promises/tree/2.5.1"
             },
             "funding": [
                 {
@@ -1159,7 +1159,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-08-05T19:30:54+00:00"
+            "time": "2026-07-08T15:48:39+00:00"
         },
         {
             "name": "guzzlehttp/psr7",
@@ -1429,16 +1429,16 @@
         },
         {
             "name": "laravel/framework",
-            "version": "v13.24.0",
+            "version": "v13.23.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/framework.git",
-                "reference": "6d481710375d2aa67656922ef760cdd2b18bcfe0"
+                "reference": "92a707229148e57f08a249211c8a5a194159c619"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/framework/zipball/6d481710375d2aa67656922ef760cdd2b18bcfe0",
-                "reference": "6d481710375d2aa67656922ef760cdd2b18bcfe0",
+                "url": "https://api.github.com/repos/laravel/framework/zipball/92a707229148e57f08a249211c8a5a194159c619",
+                "reference": "92a707229148e57f08a249211c8a5a194159c619",
                 "shasum": ""
             },
             "require": {
@@ -1458,7 +1458,7 @@
                 "guzzlehttp/guzzle": "^7.8.2",
                 "guzzlehttp/promises": "^2.0.3",
                 "guzzlehttp/uri-template": "^1.0",
-                "laravel/prompts": "^0.3.11",
+                "laravel/prompts": "^0.3.0",
                 "laravel/serializable-closure": "^2.0.10",
                 "league/commonmark": "^2.8.1",
                 "league/flysystem": "^3.25.1",
@@ -1652,20 +1652,20 @@
                 "issues": "https://github.com/laravel/framework/issues",
                 "source": "https://github.com/laravel/framework"
             },
-            "time": "2026-08-04T15:54:59+00:00"
+            "time": "2026-07-27T14:48:58+00:00"
         },
         {
             "name": "laravel/prompts",
-            "version": "v0.3.22",
+            "version": "v0.3.21",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/prompts.git",
-                "reference": "02b89b39e8972a998db4d5d4ad4719239dd4aee4"
+                "reference": "7753c65c281c2550c7c183f14e18062073b7d821"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/prompts/zipball/02b89b39e8972a998db4d5d4ad4719239dd4aee4",
-                "reference": "02b89b39e8972a998db4d5d4ad4719239dd4aee4",
+                "url": "https://api.github.com/repos/laravel/prompts/zipball/7753c65c281c2550c7c183f14e18062073b7d821",
+                "reference": "7753c65c281c2550c7c183f14e18062073b7d821",
                 "shasum": ""
             },
             "require": {
@@ -1709,22 +1709,22 @@
             "description": "Add beautiful and user-friendly forms to your command-line applications.",
             "support": {
                 "issues": "https://github.com/laravel/prompts/issues",
-                "source": "https://github.com/laravel/prompts/tree/v0.3.22"
+                "source": "https://github.com/laravel/prompts/tree/v0.3.21"
             },
-            "time": "2026-08-04T14:50:50+00:00"
+            "time": "2026-06-26T00:11:25+00:00"
         },
         {
             "name": "laravel/scout",
-            "version": "v11.5.0",
+            "version": "v11.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/scout.git",
-                "reference": "14bb75714813f6437adb5c07510be624cd4aef5f"
+                "reference": "1f091e5352d3bbb9d33c0c26a604287e2a7d1f62"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/scout/zipball/14bb75714813f6437adb5c07510be624cd4aef5f",
-                "reference": "14bb75714813f6437adb5c07510be624cd4aef5f",
+                "url": "https://api.github.com/repos/laravel/scout/zipball/1f091e5352d3bbb9d33c0c26a604287e2a7d1f62",
+                "reference": "1f091e5352d3bbb9d33c0c26a604287e2a7d1f62",
                 "shasum": ""
             },
             "require": {
@@ -1791,7 +1791,7 @@
                 "issues": "https://github.com/laravel/scout/issues",
                 "source": "https://github.com/laravel/scout"
             },
-            "time": "2026-08-04T19:29:36+00:00"
+            "time": "2026-07-21T14:35:45+00:00"
         },
         {
             "name": "laravel/serializable-closure",
@@ -1925,16 +1925,16 @@
         },
         {
             "name": "league/commonmark",
-            "version": "2.9.0",
+            "version": "2.8.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/thephpleague/commonmark.git",
-                "reference": "5703d83ba3da3b2e356a5fedc848ed6d8ffb6529"
+                "reference": "1902f60f984235023acbe03db6ad614a37b3c3e7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/5703d83ba3da3b2e356a5fedc848ed6d8ffb6529",
-                "reference": "5703d83ba3da3b2e356a5fedc848ed6d8ffb6529",
+                "url": "https://api.github.com/repos/thephpleague/commonmark/zipball/1902f60f984235023acbe03db6ad614a37b3c3e7",
+                "reference": "1902f60f984235023acbe03db6ad614a37b3c3e7",
                 "shasum": ""
             },
             "require": {
@@ -1971,7 +1971,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-main": "2.10-dev"
+                    "dev-main": "2.9-dev"
                 }
             },
             "autoload": {
@@ -2028,7 +2028,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-08-03T13:42:31+00:00"
+            "time": "2026-07-12T15:29:16+00:00"
         },
         {
             "name": "league/config",
@@ -2484,16 +2484,16 @@
         },
         {
             "name": "livewire/livewire",
-            "version": "v4.3.5",
+            "version": "v4.3.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/livewire/livewire.git",
-                "reference": "7ef4b2a876c71744e86463079dd506b26eeab624"
+                "reference": "8021f2561865c4c297a3bfca37212a99034377e7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/livewire/livewire/zipball/7ef4b2a876c71744e86463079dd506b26eeab624",
-                "reference": "7ef4b2a876c71744e86463079dd506b26eeab624",
+                "url": "https://api.github.com/repos/livewire/livewire/zipball/8021f2561865c4c297a3bfca37212a99034377e7",
+                "reference": "8021f2561865c4c297a3bfca37212a99034377e7",
                 "shasum": ""
             },
             "require": {
@@ -2548,7 +2548,7 @@
             "description": "A front-end framework for Laravel.",
             "support": {
                 "issues": "https://github.com/livewire/livewire/issues",
-                "source": "https://github.com/livewire/livewire/tree/v4.3.5"
+                "source": "https://github.com/livewire/livewire/tree/v4.3.3"
             },
             "funding": [
                 {
@@ -2556,7 +2556,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-08-03T04:09:44+00:00"
+            "time": "2026-06-27T03:16:11+00:00"
         },
         {
             "name": "maennchen/zipstream-php",
@@ -4441,16 +4441,16 @@
         },
         {
             "name": "spatie/laravel-medialibrary",
-            "version": "11.23.4",
+            "version": "11.23.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-medialibrary.git",
-                "reference": "9f28da2b45ba5330887b307140c7a00dd2b0adcf"
+                "reference": "b578814b8c81a68c8ec9c9005246df5d417fe0f9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-medialibrary/zipball/9f28da2b45ba5330887b307140c7a00dd2b0adcf",
-                "reference": "9f28da2b45ba5330887b307140c7a00dd2b0adcf",
+                "url": "https://api.github.com/repos/spatie/laravel-medialibrary/zipball/b578814b8c81a68c8ec9c9005246df5d417fe0f9",
+                "reference": "b578814b8c81a68c8ec9c9005246df5d417fe0f9",
                 "shasum": ""
             },
             "require": {
@@ -4535,7 +4535,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/laravel-medialibrary/issues",
-                "source": "https://github.com/spatie/laravel-medialibrary/tree/11.23.4"
+                "source": "https://github.com/spatie/laravel-medialibrary/tree/11.23.3"
             },
             "funding": [
                 {
@@ -4547,7 +4547,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-08-07T08:08:26+00:00"
+            "time": "2026-07-22T07:06:25+00:00"
         },
         {
             "name": "spatie/laravel-package-tools",
@@ -8091,16 +8091,16 @@
         },
         {
             "name": "laravel/pint",
-            "version": "v1.30.4",
+            "version": "v1.30.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/pint.git",
-                "reference": "a96cb6eee2961905d2fce7207aefb80945bf6b28"
+                "reference": "72a0540d1aa10b6c146bda2a22f3ae003123c0ea"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/pint/zipball/a96cb6eee2961905d2fce7207aefb80945bf6b28",
-                "reference": "a96cb6eee2961905d2fce7207aefb80945bf6b28",
+                "url": "https://api.github.com/repos/laravel/pint/zipball/72a0540d1aa10b6c146bda2a22f3ae003123c0ea",
+                "reference": "72a0540d1aa10b6c146bda2a22f3ae003123c0ea",
                 "shasum": ""
             },
             "require": {
@@ -8112,12 +8112,12 @@
             },
             "require-dev": {
                 "composer/semver": "^3.4.4",
-                "friendsofphp/php-cs-fixer": "^3.95.18",
-                "illuminate/view": "^12.65.0",
+                "friendsofphp/php-cs-fixer": "^3.95.17",
+                "illuminate/view": "^12.64.0",
                 "larastan/larastan": "^3.10.0",
                 "laravel-zero/framework": "^12.1.0",
                 "laravel/agent-detector": "^2.0.2",
-                "laravel/prompts": "^0.3.22",
+                "laravel/prompts": "^0.3.21",
                 "mockery/mockery": "^1.6.12",
                 "nunomaduro/termwind": "^2.4.0",
                 "pestphp/pest": "^3.8.7"
@@ -8157,7 +8157,7 @@
                 "issues": "https://github.com/laravel/pint/issues",
                 "source": "https://github.com/laravel/pint"
             },
-            "time": "2026-08-05T16:47:22+00:00"
+            "time": "2026-07-28T20:48:56+00:00"
         },
         {
             "name": "mockery/mockery",
