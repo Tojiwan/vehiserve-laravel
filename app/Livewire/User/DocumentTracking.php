@@ -5,10 +5,8 @@ namespace App\Livewire\User;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Livewire\WithPagination;
-use App\Models\VehicleRequest;
-use App\Models\TravelRequest;
-use App\Enums\VehicleRequestStatus;
-use App\Enums\TravelRequestStatus;
+use App\Models\TripRequest;
+use App\Enums\TripRequestStatus;
 
 #[Layout('layouts.user')]
 class DocumentTracking extends Component
@@ -18,121 +16,73 @@ class DocumentTracking extends Component
     public $sidebarOpen = false;
     public $sidebarCollapsed = false;
 
-    public $vehicleSearch = '';
-    public $travelSearch = '';
-    public $vehicleSortField = 'created_at';
-    public $vehicleSortDirection = 'desc';
-    public $travelSortField = 'created_at';
-    public $travelSortDirection = 'desc';
+    public $search = '';
+    public $statusFilter = 'all';
+    public $sortField = 'created_at';
+    public $sortDirection = 'desc';
 
-    public function sortBy($field, $type = 'vehicle'): void
+    public function sortBy($field): void
     {
-        if ($type === 'vehicle') {
-            if ($this->vehicleSortField === $field) {
-                $this->vehicleSortDirection = $this->vehicleSortDirection === 'asc' ? 'desc' : 'asc';
-            } else {
-                $this->vehicleSortField = $field;
-                $this->vehicleSortDirection = 'asc';
-            }
+        if ($this->sortField === $field) {
+            $this->sortDirection = $this->sortDirection === 'asc' ? 'desc' : 'asc';
         } else {
-            if ($this->travelSortField === $field) {
-                $this->travelSortDirection = $this->travelSortDirection === 'asc' ? 'desc' : 'asc';
-            } else {
-                $this->travelSortField = $field;
-                $this->travelSortDirection = 'asc';
-            }
+            $this->sortField = $field;
+            $this->sortDirection = 'asc';
         }
     }
 
-    public function getVehicleStatusEnum($status): VehicleRequestStatus|null
+    public function getStatusEnum($status): ?TripRequestStatus
     {
-        return VehicleRequestStatus::tryFrom($status);
+        return TripRequestStatus::tryFrom($status);
     }
 
-    public function getTravelStatusEnum($status): TravelRequestStatus|null
+    public function getStepIndex(string $status): int
     {
-        return TravelRequestStatus::tryFrom($status);
+        return TripRequestStatus::tryFrom($status)?->getStepIndex() ?? 0;
     }
 
-    public function getVehicleStepIndex(string $status): int
+    public function getRejectedStepIndex(string $status): ?int
     {
-        return VehicleRequestStatus::tryFrom($status)?->getStepIndex() ?? 0;
+        return TripRequestStatus::tryFrom($status)?->getRejectedStepIndex() ?? null;
     }
 
-    public function getTravelStepIndex(string $status): int
+    public function cancelTripRequest($id): void
     {
-        return TravelRequestStatus::tryFrom($status)?->getStepIndex() ?? 0;
-    }
-
-    public function getVehicleRejectedStepIndex(string $status): ?int
-    {
-        $enum = VehicleRequestStatus::tryFrom($status);
-        return $enum && $enum->isRejected() ? $enum->getStepIndex() : null;
-    }
-
-    public function getTravelRejectedStepIndex(string $status): ?int
-    {
-        $enum = TravelRequestStatus::tryFrom($status);
-        return $enum && $enum->isRejected() ? $enum->getStepIndex() : null;
-    }
-
-    public function cancelVehicleRequest($id): void
-    {
-        $request = VehicleRequest::where('user_ID', auth()->id())->findOrFail($id);
+        $request = TripRequest::where('user_ID', auth()->id())->findOrFail($id);
         
-        if (in_array($request->vehicle_status, ['Pending Motor Pool', 'Pending Dean', 'Pending VP', 'Pending SUC', 'Pending Final MP Approval'])) {
-            $request->update(['vehicle_status' => 'Cancelled by User']);
+        if (in_array($request->status, [
+            'Pending Dean', 'Pending Vice President', 'Pending SUC President', 
+            'Pending Motor Pool', 'Pending Final MP Approval',
+            'Pending Dean', 'Pending VP', 'Pending SUC', 'Pending Motor Pool'
+        ])) {
+            $request->update(['status' => 'Cancelled by User']);
             $request->approvals()->where('status', 'Waiting')->update(['status' => 'Cancelled']);
-            session()->flash('success', 'Vehicle request cancelled successfully!');
+            session()->flash('success', 'Trip request cancelled successfully!');
         }
     }
 
-    public function cancelTravelRequest($id): void
+    public function getTripRequestsProperty()
     {
-        $request = TravelRequest::where('user_ID', auth()->id())->findOrFail($id);
-        
-        if (in_array($request->vehicle_status, ['Pending Dean', 'Pending VP', 'Pending SUC', 'Pending Motor Pool'])) {
-            $request->update(['vehicle_status' => 'Cancelled by User']);
-            $request->approvals()->where('status', 'Waiting')->update(['status' => 'Cancelled']);
-            session()->flash('success', 'Travel request cancelled successfully!');
-        }
-    }
-
-    public function getVehicleRequestsProperty()
-    {
-        return VehicleRequest::where('user_ID', auth()->id())
-            ->where('vehicle_status', '!=', 'Cancelled by User')
-            ->when($this->vehicleSearch, function ($query) {
+        return TripRequest::where('user_ID', auth()->id())
+            ->where('status', '!=', 'Cancelled by User')
+            ->when($this->search, function ($query) {
                 $query->where(function ($q) {
-                    $q->where('requesting_person', 'like', "%{$this->vehicleSearch}%")
-                      ->orWhere('destination', 'like', "%{$this->vehicleSearch}%")
-                      ->orWhere('id', 'like', "%{$this->vehicleSearch}%");
+                    $q->where('personnel_name', 'like', "%{$this->search}%")
+                      ->orWhere('destination', 'like', "%{$this->search}%")
+                      ->orWhere('id', 'like', "%{$this->search}%");
                 });
             })
-            ->orderBy($this->vehicleSortField, $this->vehicleSortDirection)
-            ->paginate(5);
-    }
-
-    public function getTravelRequestsProperty()
-    {
-        return TravelRequest::where('user_ID', auth()->id())
-            ->where('vehicle_status', '!=', 'Cancelled by User')
-            ->when($this->travelSearch, function ($query) {
-                $query->where(function ($q) {
-                    $q->where('personnel_name', 'like', "%{$this->travelSearch}%")
-                      ->orWhere('destination', 'like', "%{$this->travelSearch}%")
-                      ->orWhere('id', 'like', "%{$this->travelSearch}%");
-                });
+            ->when($this->statusFilter !== 'all', function ($query) {
+                $query->where('status', $this->statusFilter);
             })
-            ->orderBy($this->travelSortField, $this->travelSortDirection)
-            ->paginate(5);
-    }
+            ->orderBy($this->sortField, $this->sortDirection)
+            ->paginate(10);
+        }
 
     public function render()
     {
         return view('livewire.user.document-tracking', [
-            'vehicleRequests' => $this->vehicleRequests,
-            'travelRequests' => $this->travelRequests,
+            'tripRequests' => $this->tripRequests,
         ]);
     }
 }

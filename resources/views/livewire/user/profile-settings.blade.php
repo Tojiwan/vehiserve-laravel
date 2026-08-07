@@ -85,19 +85,3 @@
         </div>
     </div>
 
-    <!-- Danger Zone -->
-    <div class="card border-red-200">
-        <div class="card-header bg-red-50">
-            <h2 class="text-xl font-semibold text-red-800">Danger Zone</h2>
-        </div>
-        <div class="card-body">
-            <div class="flex items-center justify-between">
-                <div>
-                    <p class="font-medium text-gray-900">Delete Account</p>
-                    <p class="text-sm text-gray-500">Permanently delete your account and all associated data. This action cannot be undone.</p>
-                </div>
-                <button wire:click="$dispatch('confirm-modal:show', { title: 'Delete Account', message: 'Are you absolutely sure you want to delete your account? This action is irreversible and all your data will be permanently removed.', confirmAction: 'deleteAccount', confirmText: 'Delete Account', variant: 'danger' })" class="btn btn-danger">Delete Account</button>
-            </div>
-        </div>
-    </div>
-</div>

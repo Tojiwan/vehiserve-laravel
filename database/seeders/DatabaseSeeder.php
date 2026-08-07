@@ -68,8 +68,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             VehicleSeeder::class,
             DriverSeeder::class,
-            VehicleRequestSeeder::class,
-            TravelRequestSeeder::class,
+            TripRequestSeeder::class,
         ]);
     }
 }

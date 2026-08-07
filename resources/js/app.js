@@ -1,6 +1,5 @@
-import Alpine from 'alpinejs';
-
-window.Alpine = Alpine;
+// Alpine is provided by Livewire (@livewireScripts).
+// Register Alpine data components on the Livewire Alpine instance via alpine:init.
 
 // Toast notification handler
 document.addEventListener('livewire:load', () => {
@@ -53,7 +52,7 @@ function getToastIcon(type) {
 
 // Sidebar toggle handler
 document.addEventListener('alpine:init', () => {
-    Alpine.data('sidebar', () => ({
+    window.Alpine.data('sidebar', () => ({
         collapsed: false,
         open: false,
         init() {
@@ -76,7 +75,7 @@ document.addEventListener('alpine:init', () => {
         }
     }));
 
-    Alpine.data('userMenu', () => ({
+    window.Alpine.data('userMenu', () => ({
         open: false,
         toggle() {
             this.open = !this.open;
@@ -86,7 +85,7 @@ document.addEventListener('alpine:init', () => {
         }
     }));
 
-    Alpine.data('notificationDropdown', () => ({
+    window.Alpine.data('notificationDropdown', () => ({
         show: false,
         toggle() {
             this.show = !this.show;
@@ -96,5 +95,3 @@ document.addEventListener('alpine:init', () => {
         }
     }));
 });
-
-Alpine.start();

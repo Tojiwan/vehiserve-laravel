@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('passengers', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('request_id')->constrained('vehicle_requests')->onDelete('cascade');
+            $table->foreignId('request_id')->constrained('trip_requests')->onDelete('cascade');
             $table->string('passenger_name');
             $table->timestamps();
         });

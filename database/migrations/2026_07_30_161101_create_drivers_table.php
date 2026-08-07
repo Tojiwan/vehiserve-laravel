@@ -17,7 +17,7 @@ return new class extends Migration
             $table->enum('gender', ['Male', 'Female']);
             $table->string('contact')->nullable();
             $table->date('date_joined')->nullable();
-            $table->enum('status', ['Available', 'On Leave', 'Off Duty'])->default('Available');
+            $table->enum('status', ['Available', 'On Trip', 'On Leave', 'Off Duty'])->default('Available');
             $table->string('position')->nullable();
             $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();

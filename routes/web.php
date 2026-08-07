@@ -4,8 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\DocumentDownloadController;
 use App\Http\Controllers\Admin\UsersController;
 use App\Livewire\User\Dashboard;
-use App\Livewire\User\VehicleRequestForm;
-use App\Livewire\User\TravelRequestForm;
+use App\Livewire\User\TripRequestForm;
 use App\Livewire\User\DocumentTracking;
 use App\Livewire\User\DocumentList;
 use App\Livewire\User\ProfileSettings;
@@ -49,13 +48,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::prefix('user')->name('user.')->group(function () {
         Route::get('/dashboard', Dashboard::class)->name('dashboard');
         
-        // Vehicle Requests
-        Route::get('/vehicle-request/create', VehicleRequestForm::class)->name('vehicle-request.create');
-        Route::get('/vehicle-requests', DocumentTracking::class)->name('vehicle-requests');
-        
-        // Travel Requests
-        Route::get('/travel-request/create', TravelRequestForm::class)->name('travel-request.create');
-        Route::get('/travel-requests', DocumentTracking::class)->name('travel-requests');
+        // Trip Request (Unified)
+        Route::get('/trip-request/create', TripRequestForm::class)->name('trip-request.create');
+        Route::get('/trip-requests', DocumentTracking::class)->name('trip-requests');
         
         // Document Tracking
         Route::get('/document-tracking', DocumentTracking::class)->name('document-tracking');
@@ -79,7 +74,6 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Profile routes (from Breeze)
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
 // Admin routes
@@ -120,6 +114,15 @@ Route::middleware(['auth', 'verified', 'can:access-staff-panel'])->prefix('staff
     
     // Driver Management
     Route::resource('drivers', \App\Http\Controllers\Staff\DriverController::class)->names('drivers');
+    
+    // Calendar & Schedules
+    Route::get('/calendar', fn() => view('staff.calendar'))->name('calendar');
+    Route::get('/schedule', fn() => view('staff.schedule'))->name('schedule');
+    
+    // Trips
+    Route::get('/trips', \App\Http\Controllers\Staff\TripAssignmentController::class . '@index')->name('trips.index');
+    Route::get('/trips/{trip}', \App\Http\Controllers\Staff\TripAssignmentController::class . '@show')->name('trips.show');
+    Route::post('/trips/{trip}/assign', \App\Http\Controllers\Staff\TripAssignmentController::class . '@assign')->name('trips.assign');
     
     // Calendar & Schedules
     Route::get('/calendar', fn() => view('staff.calendar'))->name('calendar');

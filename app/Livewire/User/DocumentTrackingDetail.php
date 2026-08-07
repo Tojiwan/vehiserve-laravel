@@ -4,15 +4,13 @@ namespace App\Livewire\User;
 
 use Livewire\Component;
 use Livewire\Attributes\Layout;
-use App\Models\VehicleRequest;
-use App\Models\TravelRequest;
-use App\Enums\VehicleRequestStatus;
-use App\Enums\TravelRequestStatus;
+use App\Models\TripRequest;
+use App\Enums\TripRequestStatus;
 
 #[Layout('layouts.user')]
 class DocumentTrackingDetail extends Component
 {
-    public string $type = 'vehicle';
+    public string $type = 'trip';
     public int $id = 0;
 
     public $request = null;
@@ -28,42 +26,23 @@ class DocumentTrackingDetail extends Component
 
     public function loadData(): void
     {
-        if ($this->type === 'vehicle') {
-            $this->request = VehicleRequest::where('user_ID', auth()->id())
-                ->where('id', $this->id)
-                ->with(['passengers', 'approvals.user', 'documents'])
-                ->firstOrFail();
+        $this->request = TripRequest::where('user_ID', auth()->id())
+            ->where('id', $this->id)
+            ->with(['passengers', 'approvals.user', 'documents'])
+            ->firstOrFail();
 
-            $this->approvals = $this->request->approvals()->with('user')->orderBy('id')->get();
-            $this->documents = $this->request->documents;
-        } else {
-            $this->request = TravelRequest::where('user_ID', auth()->id())
-                ->where('id', $this->id)
-                ->with(['approvals.user', 'documents'])
-                ->firstOrFail();
-
-            $this->approvals = $this->request->approvals()->with('user')->orderBy('id')->get();
-            $this->documents = $this->request->documents;
-        }
+        $this->approvals = $this->request->approvals()->with('user')->orderBy('id')->get();
+        $this->documents = $this->request->documents;
     }
 
     public function getSteps(): array
     {
-        if ($this->type === 'vehicle') {
-            return [
-                ['label' => 'Motor Pool', 'status_key' => 'Pending Motor Pool'],
-                ['label' => 'Dean', 'status_key' => 'Pending Dean'],
-                ['label' => 'VP', 'status_key' => 'Pending VP'],
-                ['label' => 'SUC Pres', 'status_key' => 'Pending SUC'],
-                ['label' => 'Final MP', 'status_key' => 'Pending Final MP Approval'],
-            ];
-        }
-
         return [
-            ['label' => 'Dean', 'status_key' => 'Pending Dean'],
-            ['label' => 'VP', 'status_key' => 'Pending VP'],
-            ['label' => 'SUC Pres', 'status_key' => 'Pending SUC'],
-            ['label' => 'Motor Pool', 'status_key' => 'Pending Motor Pool'],
+            ['label' => 'Dean', 'status_key' => TripRequestStatus::PENDING_DEAN->value],
+            ['label' => 'VP', 'status_key' => TripRequestStatus::PENDING_VP->value],
+            ['label' => 'SUC Pres', 'status_key' => TripRequestStatus::PENDING_SUC->value],
+            ['label' => 'Motor Pool', 'status_key' => TripRequestStatus::PENDING_MOTOR_POOL->value],
+            ['label' => 'Final MP', 'status_key' => TripRequestStatus::PENDING_FINAL_MP->value],
         ];
     }
 
@@ -72,7 +51,7 @@ class DocumentTrackingDetail extends Component
         if (!$this->request) return 0;
 
         $steps = $this->getSteps();
-        $status = $this->request->vehicle_status;
+        $status = $this->request->status;
 
         foreach ($steps as $index => $step) {
             if (str_contains($status, $step['status_key'])) {
@@ -82,9 +61,13 @@ class DocumentTrackingDetail extends Component
 
         // Check for terminal statuses
         $terminalStatuses = [
-            'Completed', 'Cancelled by User', 'No Vehicle Available',
-            'Rejected by Dean', 'Rejected by VP', 'Rejected by SUC',
-            'Rejected'
+            TripRequestStatus::COMPLETED->value,
+            TripRequestStatus::CANCELLED->value,
+            TripRequestStatus::NO_VEHICLE_AVAILABLE->value,
+            TripRequestStatus::REJECTED_DEAN->value,
+            TripRequestStatus::REJECTED_VP->value,
+            TripRequestStatus::REJECTED_SUC->value,
+            TripRequestStatus::REJECTED->value,
         ];
 
         foreach ($terminalStatuses as $terminal) {
@@ -101,14 +84,14 @@ class DocumentTrackingDetail extends Component
         if (!$this->request) return null;
 
         $steps = $this->getSteps();
-        $status = $this->request->vehicle_status;
+        $status = $this->request->status;
 
         $rejectedStatuses = [
-            'No Vehicle Available',
-            'Rejected by Dean',
-            'Rejected by VP',
-            'Rejected by SUC',
-            'Rejected'
+            TripRequestStatus::NO_VEHICLE_AVAILABLE->value,
+            TripRequestStatus::REJECTED_DEAN->value,
+            TripRequestStatus::REJECTED_VP->value,
+            TripRequestStatus::REJECTED_SUC->value,
+            TripRequestStatus::REJECTED->value,
         ];
 
         foreach ($rejectedStatuses as $rejected) {
@@ -126,7 +109,7 @@ class DocumentTrackingDetail extends Component
 
     public function isCancelled(): bool
     {
-        return $this->request && $this->request->vehicle_status === 'Cancelled by User';
+        return $this->request && $this->request->status === TripRequestStatus::CANCELLED->value;
     }
 
     public function render()

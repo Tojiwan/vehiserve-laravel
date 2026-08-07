@@ -74,23 +74,17 @@
         </div>
         <div class="card-body">
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <a href="{{ route('user.vehicle-request.create') }}" class="btn btn-primary w-full">
+                <a href="{{ route('user.trip-request.create') }}" class="btn btn-primary w-full">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                     </svg>
-                    New Vehicle Request
+                    New Trip Request
                 </a>
-                <a href="{{ route('user.travel-request.create') }}" class="btn btn-secondary w-full">
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                    </svg>
-                    New Travel Request
-                </a>
-                <a href="{{ route('user.document-tracking') }}" class="btn btn-secondary w-full">
+                <a href="{{ route('user.trip-requests') }}" class="btn btn-secondary w-full">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
                     </svg>
-                    Track Documents
+                    Track Requests
                 </a>
                 <a href="{{ route('user.documents') }}" class="btn btn-secondary w-full">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -108,7 +102,7 @@
         <div class="card">
             <div class="card-header flex items-center justify-between">
                 <h2 class="text-lg font-semibold text-gray-900">Recent Vehicle Requests</h2>
-                <a href="{{ route('user.document-tracking') }}" class="text-sm text-red-600 hover:text-red-700">View All</a>
+                <a href="{{ route('user.trip-requests') }}" class="text-sm text-red-600 hover:text-red-700">View All</a>
             </div>
             <div class="card-body p-0">
                 <div class="table-container">
@@ -148,8 +142,8 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4"></path>
                                         </svg>
                                         <p class="empty-state-title">No vehicle requests yet</p>
-                                        <p class="empty-state-description">Create your first vehicle request</p>
-                                        <a href="{{ route('user.vehicle-request.create') }}" class="btn btn-primary">Create Request</a>
+                                        <p class="empty-state-description">Create your first trip request</p>
+                                        <a href="{{ route('user.trip-request.create') }}" class="btn btn-primary">Create Request</a>
                                     </div>
                                 </td>
                             </tr>
@@ -164,7 +158,7 @@
         <div class="card">
             <div class="card-header flex items-center justify-between">
                 <h2 class="text-lg font-semibold text-gray-900">Recent Travel Requests</h2>
-                <a href="{{ route('user.document-tracking') }}" class="text-sm text-red-600 hover:text-red-700">View All</a>
+                <a href="{{ route('user.trip-requests') }}" class="text-sm text-red-600 hover:text-red-700">View All</a>
             </div>
             <div class="card-body p-0">
                 <div class="table-container">
@@ -205,7 +199,7 @@
                                         </svg>
                                         <p class="empty-state-title">No travel requests yet</p>
                                         <p class="empty-state-description">Create your first travel request</p>
-                                        <a href="{{ route('user.travel-request.create') }}" class="btn btn-primary">Create Request</a>
+                                        <a href="{{ route('user.trip-request.create') }}" class="btn btn-primary">Create Request</a>
                                     </div>
                                 </td>
                             </tr>

@@ -1,16 +1,19 @@
+@extends('layouts.staff')
+
+@section('content')
 <div class="space-y-6">
     <div class="flex items-center justify-between">
         <div>
             <h1 class="text-2xl font-bold text-gray-900">
-                {{ $type === 'trip' ? 'Trip Request' : ucfirst($type) }} Details
+                {{ $trip->inclusive_date ? 'Travel Request' : 'Vehicle Request' }} Details
             </h1>
-            <p class="text-gray-500 mt-1">#{{ $request->id }} - {{ $request->destination }}</p>
+            <p class="text-gray-500 mt-1">#{{ $trip->id }} - {{ $trip->destination }}</p>
         </div>
-        <a href="{{ route('user.document-tracking') }}" class="btn btn-secondary">
+        <a href="{{ route('staff.trips.index') }}" class="btn btn-secondary">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
             </svg>
-            Back to Tracking
+            Back to Queue
         </a>
     </div>
 
@@ -23,96 +26,96 @@
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div>
                     <p class="text-sm text-gray-500">Request ID</p>
-                    <p class="font-semibold text-gray-900">#{{ $request->id }}</p>
+                    <p class="font-semibold text-gray-900">#{{ $trip->id }}</p>
                 </div>
                 <div>
                     <p class="text-sm text-gray-500">
-                        {{ $request->inclusive_date ? 'Inclusive Date' : 'Request Date' }}
+                        {{ $trip->inclusive_date ? 'Inclusive Date' : 'Request Date' }}
                     </p>
                     <p class="font-semibold text-gray-900">
-                        {{ $request->inclusive_date 
-                            ? $request->inclusive_date->format('M d, Y') 
-                            : $request->departure_date->format('M d, Y') }}
+                        {{ $trip->inclusive_date 
+                            ? $trip->inclusive_date->format('M d, Y') 
+                            : $trip->departure_date->format('M d, Y') }}
                     </p>
                 </div>
                 <div>
                     <p class="text-sm text-gray-500">
-                        {{ $request->inclusive_date ? 'Personnel Name' : 'Requesting Person' }}
+                        {{ $trip->inclusive_date ? 'Personnel Name' : 'Requesting Person' }}
                     </p>
                     <p class="font-semibold text-gray-900">
-                        {{ $request->inclusive_date ? $request->personnel_name : $request->requesting_person }}
+                        {{ $trip->inclusive_date ? $trip->personnel_name : $trip->requesting_person }}
                     </p>
                 </div>
                 <div>
                     <p class="text-sm text-gray-500">Destination</p>
-                    <p class="font-semibold text-gray-900">{{ $request->destination }}</p>
+                    <p class="font-semibold text-gray-900">{{ $trip->destination }}</p>
                 </div>
             </div>
 
-            @if ($request->inclusive_date)
+            @if ($trip->inclusive_date)
             <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <p class="text-sm text-gray-500">Official Station</p>
-                    <p class="font-semibold text-gray-900">{{ $request->official_station }}</p>
+                    <p class="font-semibold text-gray-900">{{ $trip->official_station }}</p>
                 </div>
                 <div>
                     <p class="text-sm text-gray-500">Inclusive Date</p>
-                    <p class="font-semibold text-gray-900">{{ $request->inclusive_date->format('M d, Y') }}</p>
+                    <p class="font-semibold text-gray-900">{{ $trip->inclusive_date->format('M d, Y') }}</p>
                 </div>
             </div>
 
             <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                     <p class="text-sm text-gray-500">Requesting For</p>
-                    <p class="font-semibold text-gray-900">{{ $request->requesting_for }}</p>
+                    <p class="font-semibold text-gray-900">{{ $trip->requesting_for }}</p>
                 </div>
             </div>
             @else
             <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
                     <p class="text-sm text-gray-500">Request Date</p>
-                    <p class="font-semibold text-gray-900">{{ $request->request_date->format('M d, Y') }}</p>
+                    <p class="font-semibold text-gray-900">{{ $trip->request_date->format('M d, Y') }}</p>
                 </div>
                 <div>
                     <p class="text-sm text-gray-500">Departure Date</p>
-                    <p class="font-semibold text-gray-900">{{ $request->departure_date->format('M d, Y') }}</p>
+                    <p class="font-semibold text-gray-900">{{ $trip->departure_date->format('M d, Y') }}</p>
                 </div>
                 <div>
                     <p class="text-sm text-gray-500">Return Date</p>
-                    <p class="font-semibold text-gray-900">{{ $request->return_date->format('M d, Y') }}</p>
+                    <p class="font-semibold text-gray-900">{{ $trip->return_date->format('M d, Y') }}</p>
                 </div>
             </div>
 
             <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
                 <div>
                     <p class="text-sm text-gray-500">Departure Time</p>
-                    <p class="font-semibold text-gray-900">{{ $request->departure_time }}</p>
+                    <p class="font-semibold text-gray-900">{{ $trip->departure_time }}</p>
                 </div>
                 <div>
                     <p class="text-sm text-gray-500">Return Date</p>
-                    <p class="font-semibold text-gray-900">{{ $request->return_date->format('M d, Y') }}</p>
+                    <p class="font-semibold text-gray-900">{{ $trip->return_date->format('M d, Y') }}</p>
                 </div>
                 <div>
                     <p class="text-sm text-gray-500">Number of Passengers</p>
-                    <p class="font-semibold text-gray-900">{{ $request->num_passengers }}</p>
+                    <p class="font-semibold text-gray-900">{{ $trip->num_passengers }}</p>
                 </div>
             </div>
 
             <div class="mt-6">
                 <p class="text-sm text-gray-500">Office/College</p>
-                <p class="font-semibold text-gray-900">{{ $request->office_college }}</p>
+                <p class="font-semibold text-gray-900">{{ $trip->office_college }}</p>
             </div>
 
             <div class="mt-6">
                 <p class="text-sm text-gray-500">Purpose</p>
-                <p class="text-gray-900">{{ $request->purpose }}</p>
+                <p class="text-gray-900">{{ $trip->purpose }}</p>
             </div>
 
-            @if ($request->passengers->count() > 0)
+            @if ($trip->passengers->count() > 0)
             <div class="mt-6">
-                <p class="text-sm text-gray-500">Passengers ({{ $request->passengers->count() }})</p>
+                <p class="text-sm text-gray-500">Passengers ({{ $trip->passengers->count() }})</p>
                 <div class="flex flex-wrap gap-2 mt-2">
-                    @foreach ($request->passengers as $passenger)
+                    @foreach ($trip->passengers as $passenger)
                     <span class="badge badge-primary">{{ $passenger->passenger_name }}</span>
                     @endforeach
                 </div>
@@ -121,21 +124,20 @@
 
             <div class="mt-6">
                 <p class="text-sm text-gray-500">Purpose</p>
-                <p class="text-gray-900">{{ $request->purpose }}</p>
+                <p class="text-gray-900">{{ $trip->purpose }}</p>
+            </div>
+
+            @if ($trip->vehicle)
+            <div class="mt-6 p-4 bg-gray-50 rounded-lg">
+                <p class="text-sm text-gray-500">Currently Assigned Vehicle</p>
+                <p class="font-semibold text-gray-900">{{ $trip->vehicle->vehicle_name }} ({{ $trip->vehicle->plate_number }})</p>
             </div>
             @endif
 
-            @if ($request->vehicle)
+            @if ($trip->driver)
             <div class="mt-6 p-4 bg-gray-50 rounded-lg">
-                <p class="text-sm text-gray-500">Assigned Vehicle</p>
-                <p class="font-semibold text-gray-900">{{ $request->vehicle->vehicle_name }} ({{ $request->vehicle->plate_number }})</p>
-            </div>
-            @endif
-
-            @if ($request->driver)
-            <div class="mt-6 p-4 bg-gray-50 rounded-lg">
-                <p class="text-sm text-gray-500">Assigned Driver</p>
-                <p class="font-semibold text-gray-900">{{ $request->driver->full_name }} ({{ $request->driver->license_number }})</p>
+                <p class="text-sm text-gray-500">Currently Assigned Driver</p>
+                <p class="font-semibold text-gray-900">{{ $trip->driver->full_name }} ({{ $trip->driver->license_number }})</p>
             </div>
             @endif
         </div>
@@ -148,15 +150,15 @@
         </div>
         <div class="card-body">
             <livewire:shared.progress-tracker 
-                :steps="$steps"
-                :currentStep="$currentStep"
-                :rejectedStep="$rejectedStep"
-                :cancelled="$cancelled"
+                :steps="{{ $steps }}"
+                :currentStep="{{ $currentStep }}"
+                :rejectedStep="{{ $rejectedStep }}"
+                :cancelled="{{ $cancelled }}"
             />
         </div>
     </div>
 
-    <!-- Approval Timeline -->
+    <!-- Approval History -->
     <div class="card">
         <div class="card-header">
             <h2 class="text-lg font-semibold text-gray-900">Approval History</h2>
@@ -211,57 +213,59 @@
         </div>
     </div>
 
-    <!-- Documents -->
-    @if ($documents->count() > 0)
+    <!-- Vehicle & Driver Assignment -->
     <div class="card">
         <div class="card-header">
-            <h2 class="text-lg font-semibold text-gray-900">Documents</h2>
+            <h2 class="text-lg font-semibold text-gray-900">Assign Vehicle & Driver</h2>
         </div>
         <div class="card-body">
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                @foreach ($documents as $document)
-                <div class="card border border-gray-200">
-                    <div class="card-body p-4">
-                        <div class="flex items-start gap-3">
-                            <div class="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center">
-                                <svg class="w-5 h-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                </svg>
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <p class="text-sm font-medium text-gray-900 truncate">{{ $document->file_name }}</p>
-                                <p class="text-xs text-gray-500">{{ $document->type }}</p>
-                                <p class="text-xs text-gray-400">{{ $document->file_size ? number_format($document->file_size / 1024, 1) . ' KB' : 'Unknown size' }}</p>
-                            </div>
-                        </div>
-                        <div class="mt-3 flex gap-2">
-                            <a href="{{ asset('storage/' . $document->file_path) }}" target="_blank" class="btn btn-secondary btn-sm">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                                </svg>
-                                View
-                            </a>
-                            <a href="{{ route('document.download', ['path' => $document->file_path]) }}" class="btn btn-primary btn-sm">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
-                                </svg>
-                                Download
-                            </a>
-                        </div>
+            <form method="POST" action="{{ route('staff.trips.assign', $trip) }}" class="space-y-6">
+                @csrf
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="label" for="vehicle_ID">Vehicle <span class="text-red-500">*</span></label>
+                        <select id="vehicle_ID" name="vehicle_ID" class="input" required>
+                            <option value="">Select Vehicle</option>
+                            @foreach ($vehicles as $vehicle)
+                            <option value="{{ $vehicle->vehicle_ID }}">
+                                {{ $vehicle->vehicle_name }} ({{ $vehicle->plate_number }}) - Capacity: {{ $vehicle->capacity }}
+                            </option>
+                            @endforeach
+                        </select>
+                        @error('vehicle_ID') <p class="error-message">{{ $message }}</p> @enderror
+                    </div>
+                    <div class="form-group">
+                        <label class="label" for="driver_ID">Driver <span class="text-red-500">*</span></label>
+                        <select id="driver_ID" name="driver_ID" class="input" required>
+                            <option value="">Select Driver</option>
+                            @foreach ($drivers as $driver)
+                            <option value="{{ $driver->driver_ID }}">
+                                {{ $driver->full_name }} ({{ $driver->license_number }})
+                            </option>
+                            @endforeach
+                        </select>
+                        @error('driver_ID') <p class="error-message">{{ $message }}</p> @enderror
                     </div>
                 </div>
-                @endforeach
-            </div>
+
+                <div class="form-group">
+                    <label class="label" for="return_date">Return Date <span class="text-red-500">*</span></label>
+                    <input type="date" id="return_date" name="return_date" class="input" required value="{{ old('return_date', $trip->return_date) }}">
+                    @error('return_date') <p class="error-message">{{ $message }}</p> @enderror
+                </div>
+
+                <div class="flex justify-end gap-2 pt-4 border-t border-gray-200">
+                    <a href="{{ route('staff.trips.index') }}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 12a6 6 0 01-6 6H6a6 6 0 01-6-6H0"></path>
+                        </svg>
+                        Assign Vehicle & Driver
+                    </button>
+                </div>
+            </form>
         </div>
     </div>
-    @endif
-
-    @if ($request->status === 'Cancelled by User' || $request->status === 'Completed')
-    <div class="mt-6 text-center">
-        <span class="badge {{ $request->status === 'Completed' ? 'badge-success' : 'badge-gray' }} text-lg px-4 py-2">
-            {{ $request->status }}
-        </span>
-    </div>
-    @endif
 </div>
+@endsection
