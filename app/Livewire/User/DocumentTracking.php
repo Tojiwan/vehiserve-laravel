@@ -7,6 +7,7 @@ use Livewire\Attributes\Layout;
 use Livewire\WithPagination;
 use App\Models\TripRequest;
 use App\Enums\TripRequestStatus;
+use App\Services\TripRequestWorkflowService;
 
 #[Layout('layouts.user')]
 class DocumentTracking extends Component
@@ -46,17 +47,23 @@ class DocumentTracking extends Component
         return TripRequestStatus::tryFrom($status)?->getRejectedStepIndex() ?? null;
     }
 
+    public function outcomeLabel(string $status): ?string
+    {
+        return TripRequestStatus::tryFrom($status)?->outcomeLabel();
+    }
+
+    public function isCancellable(string $status): bool
+    {
+        return in_array($status, app(TripRequestWorkflowService::class)->cancellableStatuses());
+    }
+
     public function cancelTripRequest($id): void
     {
         $request = TripRequest::where('user_ID', auth()->id())->findOrFail($id);
-        
-        if (in_array($request->status, [
-            'Pending Dean', 'Pending Vice President', 'Pending SUC President', 
-            'Pending Motor Pool', 'Pending Final MP Approval',
-            'Pending Dean', 'Pending VP', 'Pending SUC', 'Pending Motor Pool'
-        ])) {
-            $request->update(['status' => 'Cancelled by User']);
-            $request->approvals()->where('status', 'Waiting')->update(['status' => 'Cancelled']);
+
+        $workflow = app(TripRequestWorkflowService::class);
+
+        if ($workflow->cancelTripRequest($request, auth()->id())) {
             session()->flash('success', 'Trip request cancelled successfully!');
         }
     }

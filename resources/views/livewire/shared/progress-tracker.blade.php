@@ -35,13 +35,6 @@
         ">
             {{ $step['label'] }}
         </span>
-        @if($index < count($steps) - 1)
-        <div class="progress-step-line 
-            @if($index < $currentStep && $rejectedStep === null && !$cancelled) completed
-            @else bg-gray-200
-            @endif
-        "></div>
-        @endif
     </div>
     @endforeach
 </div>

@@ -57,10 +57,23 @@ enum TripRequestStatus: string
             self::PENDING_SUC => 2,
             self::APPROVED_SUC, self::REJECTED_SUC => 3,
             self::PENDING_MOTOR_POOL => 3,
-            self::VEHICLE_ASSIGNED, self::COMPLETED => 4,
+            self::VEHICLE_ASSIGNED, self::COMPLETED => 5,
             self::NO_VEHICLE_AVAILABLE => 4,
             self::PENDING_FINAL_MP => 4,
             default => 0,
+        };
+    }
+
+    public function outcomeLabel(): ?string
+    {
+        return match ($this) {
+            self::VEHICLE_ASSIGNED, self::COMPLETED => 'Approved',
+            self::NO_VEHICLE_AVAILABLE,
+            self::REJECTED_DEAN,
+            self::REJECTED_VP,
+            self::REJECTED_SUC,
+            self::REJECTED => 'Declined',
+            default => null,
         };
     }
 

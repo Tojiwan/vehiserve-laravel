@@ -238,7 +238,7 @@
 
     /* Progress tracker */
     .progress-tracker {
-        @apply relative flex items-center;
+        @apply relative flex items-center gap-3;
     }
 
     .progress-step {
@@ -259,14 +259,6 @@
 
     .progress-step-circle.pending {
         @apply bg-white border-gray-200 text-gray-400;
-    }
-
-    .progress-step-line {
-        @apply absolute top-5 left-1/2 w-full h-0.5 bg-gray-200 -translate-x-1/2;
-    }
-
-    .progress-step-line.completed {
-        @apply bg-green-600;
     }
 
     .progress-step-label {

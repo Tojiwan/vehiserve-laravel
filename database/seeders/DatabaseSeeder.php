@@ -21,12 +21,6 @@ class DatabaseSeeder extends Seeder
                 'role' => 'User',
             ],
             [
-                'name' => 'Motor Pool Staff',
-                'email' => 'staff@test.com',
-                'password' => bcrypt('password'),
-                'role' => 'Staff',
-            ],
-            [
                 'name' => 'Admin User',
                 'email' => 'admin@test.com',
                 'password' => bcrypt('password'),
@@ -39,16 +33,22 @@ class DatabaseSeeder extends Seeder
                 'role' => 'Dean',
             ],
             [
-                'name' => 'VP User',
-                'email' => 'vp@test.com',
+                'name' => 'Vice President User',
+                'email' => 'vicepresident@test.com',
                 'password' => bcrypt('password'),
-                'role' => 'VP',
+                'role' => 'Vice President',
             ],
             [
-                'name' => 'SUC President',
-                'email' => 'suc@test.com',
+                'name' => 'SUC President User',
+                'email' => 'sucpresident@test.com',
                 'password' => bcrypt('password'),
-                'role' => 'SUC',
+                'role' => 'SUC President',
+            ],
+            [
+                'name' => 'Motor Pool Staff',
+                'email' => 'motorpool@test.com',
+                'password' => bcrypt('password'),
+                'role' => 'Motor Pool',
             ],
             [
                 'name' => 'Super Admin',

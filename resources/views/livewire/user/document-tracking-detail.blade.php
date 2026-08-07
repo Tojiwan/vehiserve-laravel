@@ -6,12 +6,22 @@
             </h1>
             <p class="text-gray-500 mt-1">#{{ $request->id }} - {{ $request->destination }}</p>
         </div>
-        <a href="{{ route('user.document-tracking') }}" class="btn btn-secondary">
-            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-            </svg>
-            Back to Tracking
-        </a>
+        <div class="flex items-center gap-2">
+            @if ($this->isCancellable())
+            <button wire:click="$dispatch('confirm-modal:show', ['title' => 'Cancel Request', 'message' => 'Are you sure you want to cancel this trip request?', 'confirmAction' => 'cancelTripRequest', 'confirmParams' => [{'id' => $request->id}], 'variant' => 'danger'])" class="btn btn-danger">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+                Cancel Request
+            </button>
+            @endif
+            <a href="{{ route('user.document-tracking') }}" class="btn btn-secondary">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                </svg>
+                Back to Tracking
+            </a>
+        </div>
     </div>
 
     <!-- Request Info Card -->
@@ -264,4 +274,7 @@
         </span>
     </div>
     @endif
+
+    <!-- Confirm Modal -->
+    <livewire:shared.confirm-modal />
 </div>

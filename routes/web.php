@@ -25,11 +25,11 @@ Route::middleware(['auth', 'verified'])->get('/dashboard', function () {
         return redirect()->route('admin.dashboard');
     }
     
-    if ($user->hasRole('Staff')) {
+    if ($user->hasRole('Staff') || $user->hasRole('Motor Pool')) {
         return redirect()->route('staff.dashboard');
     }
     
-    if ($user->hasAnyRole(['Dean', 'VP', 'SUC'])) {
+    if ($user->hasAnyRole(['Dean', 'Vice President', 'SUC President'])) {
         return redirect()->route('approver.dashboard');
     }
     

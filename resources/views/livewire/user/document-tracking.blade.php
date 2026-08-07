@@ -101,8 +101,8 @@
                             <td>
                                 <livewire:shared.progress-tracker 
                                     :steps="$request->inclusive_date
-                                        ? [['label' => 'Dean', 'status_key' => 'Pending Dean'], ['label' => 'VP', 'status_key' => 'Pending VP'], ['label' => 'SUC Pres', 'status_key' => 'Pending SUC'], ['label' => 'Motor Pool', 'status_key' => 'Pending Motor Pool']]
-                                        : [['label' => 'Motor Pool', 'status_key' => 'Pending Motor Pool'], ['label' => 'Dean', 'status_key' => 'Pending Dean'], ['label' => 'VP', 'status_key' => 'Pending VP'], ['label' => 'SUC Pres', 'status_key' => 'Pending SUC'], ['label' => 'Final MP', 'status_key' => 'Pending Final MP Approval']]"
+                                        ? [['label' => 'Dean', 'status_key' => 'Pending Dean'], ['label' => 'VP', 'status_key' => 'Pending VP'], ['label' => 'SUC', 'status_key' => 'Pending SUC'], ['label' => $this->outcomeLabel($request->status) ?? 'MP', 'status_key' => 'Pending Motor Pool']]
+                                        : [['label' => 'MP', 'status_key' => 'Pending Motor Pool'], ['label' => 'Dean', 'status_key' => 'Pending Dean'], ['label' => 'VP', 'status_key' => 'Pending VP'], ['label' => 'SUC', 'status_key' => 'Pending SUC'], ['label' => $this->outcomeLabel($request->status) ?? 'Final MP', 'status_key' => 'Pending Final MP Approval']]"
                                     :currentStep="$this->getStepIndex($request->status)"
                                     :rejectedStep="$this->getRejectedStepIndex($request->status)"
                                     :cancelled="$request->status === 'Cancelled by User'"
@@ -116,7 +116,7 @@
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                                         </svg>
                                     </a>
-                                    @if(in_array($request->status, ['Pending Dean', 'Pending Vice President', 'Pending SUC President', 'Pending Motor Pool', 'Pending Final MP Approval']))
+                                    @if($this->isCancellable($request->status))
                                     <button wire:click="$dispatch('confirm-modal:show', ['title' => 'Cancel Request', 'message' => 'Are you sure you want to cancel this trip request?', 'confirmAction' => 'cancelTripRequest', 'confirmParams' => [{'id' => $request->id}], 'variant' => 'danger'])" class="btn btn-ghost btn-sm btn-icon text-red-500 hover:text-red-700" title="Cancel Request">
                                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>

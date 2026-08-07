@@ -55,11 +55,11 @@ class AuthServiceProvider extends ServiceProvider
         });
 
         Gate::define('access-staff-panel', function (User $user) {
-            return $user->hasAnyRole(['Staff', 'Admin', 'Super Admin']);
+            return $user->hasAnyRole(['Staff', 'Motor Pool', 'Admin', 'Super Admin']);
         });
 
         Gate::define('access-approver-panel', function (User $user) {
-            return $user->hasAnyRole(['Dean', 'VP', 'SUC', 'Admin', 'Super Admin']);
+            return $user->hasAnyRole(['Dean', 'Vice President', 'SUC President', 'Admin', 'Super Admin']);
         });
     }
 }

@@ -6,6 +6,7 @@ use Livewire\Component;
 use Livewire\Attributes\Layout;
 use App\Models\TripRequest;
 use App\Enums\TripRequestStatus;
+use App\Services\TripRequestWorkflowService;
 
 #[Layout('layouts.user')]
 class DocumentTrackingDetail extends Component
@@ -40,10 +41,17 @@ class DocumentTrackingDetail extends Component
         return [
             ['label' => 'Dean', 'status_key' => TripRequestStatus::PENDING_DEAN->value],
             ['label' => 'VP', 'status_key' => TripRequestStatus::PENDING_VP->value],
-            ['label' => 'SUC Pres', 'status_key' => TripRequestStatus::PENDING_SUC->value],
-            ['label' => 'Motor Pool', 'status_key' => TripRequestStatus::PENDING_MOTOR_POOL->value],
-            ['label' => 'Final MP', 'status_key' => TripRequestStatus::PENDING_FINAL_MP->value],
+            ['label' => 'SUC', 'status_key' => TripRequestStatus::PENDING_SUC->value],
+            ['label' => 'MP', 'status_key' => TripRequestStatus::PENDING_MOTOR_POOL->value],
+            ['label' => $this->outcomeLabel() ?? 'Final MP', 'status_key' => TripRequestStatus::PENDING_FINAL_MP->value],
         ];
+    }
+
+    public function outcomeLabel(): ?string
+    {
+        return $this->request
+            ? TripRequestStatus::tryFrom($this->request->status)?->outcomeLabel()
+            : null;
     }
 
     public function getCurrentStepIndex(): int
@@ -62,6 +70,7 @@ class DocumentTrackingDetail extends Component
         // Check for terminal statuses
         $terminalStatuses = [
             TripRequestStatus::COMPLETED->value,
+            TripRequestStatus::VEHICLE_ASSIGNED->value,
             TripRequestStatus::CANCELLED->value,
             TripRequestStatus::NO_VEHICLE_AVAILABLE->value,
             TripRequestStatus::REJECTED_DEAN->value,
@@ -72,7 +81,10 @@ class DocumentTrackingDetail extends Component
 
         foreach ($terminalStatuses as $terminal) {
             if (str_contains($status, $terminal)) {
-                return count($steps) - 1;
+                return in_array($status, [
+                    TripRequestStatus::COMPLETED->value,
+                    TripRequestStatus::VEHICLE_ASSIGNED->value,
+                ]) ? count($steps) : count($steps) - 1;
             }
         }
 
@@ -110,6 +122,27 @@ class DocumentTrackingDetail extends Component
     public function isCancelled(): bool
     {
         return $this->request && $this->request->status === TripRequestStatus::CANCELLED->value;
+    }
+
+    public function isCancellable(): bool
+    {
+        return $this->request && in_array(
+            $this->request->status,
+            app(TripRequestWorkflowService::class)->cancellableStatuses()
+        );
+    }
+
+    public function cancelTripRequest($id): void
+    {
+        $request = TripRequest::where('user_ID', auth()->id())->findOrFail($id);
+
+        $workflow = app(TripRequestWorkflowService::class);
+
+        if ($workflow->cancelTripRequest($request, auth()->id())) {
+            session()->flash('success', 'Trip request cancelled successfully!');
+        }
+
+        $this->redirectRoute('user.document-tracking');
     }
 
     public function render()

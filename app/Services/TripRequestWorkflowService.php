@@ -4,7 +4,9 @@ namespace App\Services;
 
 use App\Models\TripRequest;
 use App\Models\Approval;
+use App\Models\Booking;
 use App\Models\User;
+use App\Enums\TripRequestStatus;
 use App\Notifications\RequestApproved;
 use App\Notifications\RequestRejected;
 use App\Notifications\RequestSubmitted;
@@ -108,6 +110,58 @@ class TripRequestWorkflowService
 
         // Notify user
         $trip->user->notify(new RequestRejected($trip, $rejectedByRole, $comment));
+    }
+
+    /**
+     * Statuses a user may cancel their trip request from
+     */
+    public function cancellableStatuses(): array
+    {
+        return [
+            TripRequestStatus::PENDING_DEAN->value,
+            TripRequestStatus::PENDING_VP->value,
+            TripRequestStatus::PENDING_SUC->value,
+            TripRequestStatus::PENDING_MOTOR_POOL->value,
+            TripRequestStatus::PENDING_FINAL_MP->value,
+            TripRequestStatus::VEHICLE_ASSIGNED->value,
+        ];
+    }
+
+    /**
+     * Cancel the trip request by the requesting user
+     */
+    public function cancelTripRequest(TripRequest $trip, ?int $userId = null): bool
+    {
+        if (!in_array($trip->status, $this->cancellableStatuses())) {
+            return false;
+        }
+
+        DB::transaction(function () use ($trip, $userId) {
+            $trip->update(['status' => TripRequestStatus::CANCELLED->value]);
+
+            // Mark remaining approvals as cancelled
+            $trip->approvals()
+                ->whereIn('status', ['Waiting', 'Pending'])
+                ->update(['status' => 'Cancelled']);
+
+            // Release vehicle and driver if assigned
+            if ($trip->vehicle_ID) {
+                \App\Models\Vehicle::where('vehicle_ID', $trip->vehicle_ID)
+                    ->where('status', 'On Trip')
+                    ->update(['status' => 'Available']);
+            }
+
+            if ($trip->driver_ID) {
+                \App\Models\Driver::where('driver_ID', $trip->driver_ID)
+                    ->where('status', 'On Trip')
+                    ->update(['status' => 'Available']);
+            }
+
+            // Remove the booking if one exists
+            Booking::where('trip_request_id', $trip->id)->delete();
+        });
+
+        return true;
     }
 
     /**

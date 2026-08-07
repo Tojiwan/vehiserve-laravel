@@ -18,6 +18,13 @@ class TripRequestSeeder extends Seeder
 {
     public function run(): void
     {
+        // Keep seeding idempotent: remove previously seeded trip request data
+        Approval::where('approvable_type', TripRequest::class)->delete();
+        Booking::whereNotNull('trip_request_id')->delete();
+        TripRequest::query()->delete();
+        Vehicle::where('status', 'On Trip')->update(['status' => 'Available']);
+        Driver::where('status', 'On Trip')->update(['status' => 'Available']);
+
         $users = User::whereHas('roles', function ($q) {
             $q->where('name', 'User');
         })->get();
@@ -152,7 +159,7 @@ class TripRequestSeeder extends Seeder
                 'departure_time' => '04:00',
                 'return_date' => Carbon::today()->addDays(27),
                 'num_passengers' => 12,
-                'status' => 'Pending Motor Pool',
+                'status' => TripRequestStatus::PENDING_FINAL_MP->value,
                 'passengers' => [
                     'Kevin J. Santos', 'Alyssa M. Cruz', 'Gabriel T. Torres',
                     'Samantha R. Reyes', 'Nathaniel P. Garcia', 'Victoria A. Santos',
@@ -291,72 +298,97 @@ class TripRequestSeeder extends Seeder
     protected function createApprovalChain(TripRequest $request): void
     {
         $status = $request->status;
-        $stages = [
-            'Dean' => [
-                'Pending Dean', 'Approved by Dean', 'Rejected by Dean',
-            ],
-            'Vice President' => [
-                'Pending Vice President', 'Approved by Vice President', 'Rejected by Vice President',
-            ],
-            'SUC President' => [
-                'Pending SUC President', 'Approved by SUC President', 'Rejected by SUC President',
-            ],
-            'Motor Pool' => [
-                'Pending Motor Pool', 'Vehicle Assigned', 'No Vehicle Available',
-            ],
+        $stages = ['Dean', 'Vice President', 'SUC President', 'Motor Pool'];
+
+        $stageOrder = [
+            TripRequestStatus::PENDING_DEAN->value => 0,
+            TripRequestStatus::APPROVED_DEAN->value => 0,
+            TripRequestStatus::REJECTED_DEAN->value => 0,
+            TripRequestStatus::PENDING_VP->value => 1,
+            TripRequestStatus::APPROVED_VP->value => 1,
+            TripRequestStatus::REJECTED_VP->value => 1,
+            TripRequestStatus::PENDING_SUC->value => 2,
+            TripRequestStatus::APPROVED_SUC->value => 2,
+            TripRequestStatus::REJECTED_SUC->value => 2,
+            TripRequestStatus::PENDING_MOTOR_POOL->value => 3,
+            TripRequestStatus::PENDING_FINAL_MP->value => 3,
+            TripRequestStatus::VEHICLE_ASSIGNED->value => 3,
+            TripRequestStatus::NO_VEHICLE_AVAILABLE->value => 3,
+            TripRequestStatus::COMPLETED->value => 3,
         ];
 
-        $statusOrder = [
-            'Pending Dean' => 1,
-            'Approved by Dean' => 2,
-            'Rejected by Dean' => 2,
-            'Pending Vice President' => 3,
-            'Approved by Vice President' => 4,
-            'Rejected by Vice President' => 4,
-            'Pending SUC President' => 5,
-            'Approved by SUC President' => 6,
-            'Rejected by SUC President' => 6,
-            'Pending Motor Pool' => 7,
-            'Vehicle Assigned' => 8,
-            'No Vehicle Available' => 8,
-            'Completed' => 9,
-            'Cancelled by User' => 0,
-        ];
+        $rejectedByRole = null;
+        foreach ([
+            TripRequestStatus::REJECTED_DEAN->value => 'Dean',
+            TripRequestStatus::REJECTED_VP->value => 'Vice President',
+            TripRequestStatus::REJECTED_SUC->value => 'SUC President',
+            TripRequestStatus::NO_VEHICLE_AVAILABLE->value => 'Motor Pool',
+        ] as $rejectedStatus => $role) {
+            if ($status === $rejectedStatus) {
+                $rejectedByRole = $role;
+                break;
+            }
+        }
 
-        $currentStageOrder = $statusOrder[$status] ?? 0;
+        $approvedAtStage = null;
+        foreach ([
+            TripRequestStatus::APPROVED_DEAN->value => 0,
+            TripRequestStatus::APPROVED_VP->value => 1,
+            TripRequestStatus::APPROVED_SUC->value => 2,
+        ] as $approvedStatus => $order) {
+            if ($status === $approvedStatus) {
+                $approvedAtStage = $order;
+                break;
+            }
+        }
 
-        foreach ($stages as $role => $roleStatuses) {
-            foreach ($roleStatuses as $s) {
-                $stageOrder = $statusOrder[$s] ?? 0;
+        $currentStageOrder = $stageOrder[$status] ?? 0;
 
-                $approvalStatus = 'Waiting';
-                if ($stageOrder < $currentStageOrder) {
+        foreach ($stages as $index => $role) {
+            $approvalStatus = 'Waiting';
+
+            if ($rejectedByRole) {
+                if ($index < array_search($rejectedByRole, $stages)) {
                     $approvalStatus = 'Approved';
-                } elseif ($stageOrder === $currentStageOrder && in_array($status, [
-                    'Approved by Dean', 'Approved by Vice President', 'Approved by SUC President',
-                    'Vehicle Assigned', 'Completed'
-                ])) {
-                    $approvalStatus = 'Approved';
-                } elseif ($stageOrder === $currentStageOrder && in_array($status, [
-                    'Rejected by Dean', 'Rejected by Vice President', 'Rejected by SUC President',
-                    'No Vehicle Available'
-                ])) {
+                } elseif ($role === $rejectedByRole) {
                     $approvalStatus = 'Rejected';
-                } elseif ($stageOrder === $currentStageOrder && in_array($status, [
-                    'Pending Dean', 'Pending Vice President', 'Pending SUC President', 'Pending Motor Pool'
-                ])) {
+                } else {
+                    $approvalStatus = 'Cancelled';
+                }
+            } elseif (in_array($status, [
+                TripRequestStatus::CANCELLED->value,
+                TripRequestStatus::REJECTED->value,
+            ])) {
+                $approvalStatus = 'Cancelled';
+            } elseif ($approvedAtStage !== null) {
+                if ($index <= $approvedAtStage) {
+                    $approvalStatus = 'Approved';
+                } elseif ($index === $approvedAtStage + 1) {
                     $approvalStatus = 'Pending';
                 }
-
-                Approval::create([
-                    'approvable_type' => \App\Models\TripRequest::class,
-                    'approvable_id' => $request->id,
-                    'user_ID' => $approvalStatus !== 'Waiting' ? \App\Models\User::role($role)->inRandomOrder()->first()?->id : null,
-                    'role' => $role,
-                    'status' => $approvalStatus,
-                    'approved_at' => $approvalStatus !== 'Waiting' ? Carbon::now()->subDays(rand(1, 5)) : null,
-                ]);
+            } elseif ($index < $currentStageOrder) {
+                $approvalStatus = 'Approved';
+            } elseif ($index === $currentStageOrder && in_array($status, [
+                TripRequestStatus::VEHICLE_ASSIGNED->value,
+                TripRequestStatus::COMPLETED->value,
+            ])) {
+                $approvalStatus = 'Approved';
+            } elseif ($index === $currentStageOrder) {
+                $approvalStatus = 'Pending';
             }
+
+            Approval::create([
+                'approvable_type' => TripRequest::class,
+                'approvable_id' => $request->id,
+                'user_ID' => in_array($approvalStatus, ['Approved', 'Rejected', 'Pending'])
+                    ? User::role($role)->inRandomOrder()->first()?->id
+                    : null,
+                'role' => $role,
+                'status' => $approvalStatus,
+                'approved_at' => in_array($approvalStatus, ['Approved', 'Rejected'])
+                    ? Carbon::now()->subDays(rand(1, 5))
+                    : null,
+            ]);
         }
     }
 }
