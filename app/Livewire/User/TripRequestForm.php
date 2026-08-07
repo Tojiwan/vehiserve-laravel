@@ -20,6 +20,7 @@ class TripRequestForm extends Component
     use WithFileUploads;
 
     // Travel fields
+    public $request_date;
     public $personnel_name;
     public $official_station;
     public $destination;
@@ -66,6 +67,7 @@ class TripRequestForm extends Component
 
     protected $rules = [
         // Travel fields
+        'request_date' => 'required|date|after_or_equal:today',
         'personnel_name' => 'required|string|max:255',
         'official_station' => 'required|string|max:255',
         'destination' => 'required|string|max:255',
@@ -89,6 +91,7 @@ class TripRequestForm extends Component
     ];
 
     protected $messages = [
+        'request_date.after_or_equal' => 'Request date must be today or in the future.',
         'inclusive_date.after_or_equal' => 'Inclusive date must be today or in the future.',
         'departure_date.after_or_equal' => 'Departure date must be today or in the future.',
         'return_date.after_or_equal' => 'Return date must be on or after departure date.',
@@ -96,6 +99,7 @@ class TripRequestForm extends Component
 
     public function mount(): void
     {
+        $this->request_date = now()->format('Y-m-d');
         $this->inclusive_date = now()->format('Y-m-d');
         $this->departure_date = now()->format('Y-m-d');
         $this->return_date = now()->format('Y-m-d');
@@ -195,6 +199,7 @@ class TripRequestForm extends Component
         }
 
         $data = [
+            'request_date' => $this->request_date,
             'personnel_name' => $this->personnel_name,
             'official_station' => $this->official_station,
             'destination' => $this->destination,

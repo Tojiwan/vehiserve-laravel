@@ -15,7 +15,7 @@
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                 <div class="flex items-center gap-3">
                     <input type="text" wire:model.live.debounce.300ms="search" placeholder="Search by name, destination, or ID..." class="input w-full sm:w-64">
-                    <select wire:model="statusFilter" class="input w-40">
+                    <select wire:model.live="statusFilter" class="input w-40">
                         <option value="all">All Statuses</option>
                         <option value="Pending Dean">Pending Dean</option>
                         <option value="Approved by Dean">Approved by Dean</option>
@@ -34,8 +34,9 @@
                         <option value="Cancelled by User">Cancelled by User</option>
                         <option value="Rejected">Rejected</option>
                     </select>
-                    <select wire:model="sortField" class="input w-40">
+                    <select wire:model.live="sortField" class="input w-40">
                         <option value="created_at">Date Created</option>
+                        <option value="id">Request ID</option>
                         <option value="inclusive_date">Inclusive Date</option>
                         <option value="departure_date">Departure Date</option>
                         <option value="destination">Destination</option>
@@ -100,11 +101,7 @@
                             </td>
                             <td>
                                 <livewire:shared.progress-tracker 
-                                    :steps="$request->inclusive_date
-                                        ? [['label' => 'Dean', 'status_key' => 'Pending Dean'], ['label' => 'VP', 'status_key' => 'Pending VP'], ['label' => 'SUC', 'status_key' => 'Pending SUC'], ['label' => $this->outcomeLabel($request->status) ?? 'MP', 'status_key' => 'Pending Motor Pool']]
-                                        : [['label' => 'MP', 'status_key' => 'Pending Motor Pool'], ['label' => 'Dean', 'status_key' => 'Pending Dean'], ['label' => 'VP', 'status_key' => 'Pending VP'], ['label' => 'SUC', 'status_key' => 'Pending SUC'], ['label' => $this->outcomeLabel($request->status) ?? 'Final MP', 'status_key' => 'Pending Final MP Approval']]"
-                                    :currentStep="$this->getStepIndex($request->status)"
-                                    :rejectedStep="$this->getRejectedStepIndex($request->status)"
+                                    :steps="$request->progressSteps()"
                                     :cancelled="$request->status === 'Cancelled by User'"
                                 />
                             </td>

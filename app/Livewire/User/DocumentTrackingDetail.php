@@ -36,89 +36,6 @@ class DocumentTrackingDetail extends Component
         $this->documents = $this->request->documents;
     }
 
-    public function getSteps(): array
-    {
-        return [
-            ['label' => 'Dean', 'status_key' => TripRequestStatus::PENDING_DEAN->value],
-            ['label' => 'VP', 'status_key' => TripRequestStatus::PENDING_VP->value],
-            ['label' => 'SUC', 'status_key' => TripRequestStatus::PENDING_SUC->value],
-            ['label' => 'MP', 'status_key' => TripRequestStatus::PENDING_MOTOR_POOL->value],
-            ['label' => $this->outcomeLabel() ?? 'Final MP', 'status_key' => TripRequestStatus::PENDING_FINAL_MP->value],
-        ];
-    }
-
-    public function outcomeLabel(): ?string
-    {
-        return $this->request
-            ? TripRequestStatus::tryFrom($this->request->status)?->outcomeLabel()
-            : null;
-    }
-
-    public function getCurrentStepIndex(): int
-    {
-        if (!$this->request) return 0;
-
-        $steps = $this->getSteps();
-        $status = $this->request->status;
-
-        foreach ($steps as $index => $step) {
-            if (str_contains($status, $step['status_key'])) {
-                return $index;
-            }
-        }
-
-        // Check for terminal statuses
-        $terminalStatuses = [
-            TripRequestStatus::COMPLETED->value,
-            TripRequestStatus::VEHICLE_ASSIGNED->value,
-            TripRequestStatus::CANCELLED->value,
-            TripRequestStatus::NO_VEHICLE_AVAILABLE->value,
-            TripRequestStatus::REJECTED_DEAN->value,
-            TripRequestStatus::REJECTED_VP->value,
-            TripRequestStatus::REJECTED_SUC->value,
-            TripRequestStatus::REJECTED->value,
-        ];
-
-        foreach ($terminalStatuses as $terminal) {
-            if (str_contains($status, $terminal)) {
-                return in_array($status, [
-                    TripRequestStatus::COMPLETED->value,
-                    TripRequestStatus::VEHICLE_ASSIGNED->value,
-                ]) ? count($steps) : count($steps) - 1;
-            }
-        }
-
-        return 0;
-    }
-
-    public function getRejectedStepIndex(): ?int
-    {
-        if (!$this->request) return null;
-
-        $steps = $this->getSteps();
-        $status = $this->request->status;
-
-        $rejectedStatuses = [
-            TripRequestStatus::NO_VEHICLE_AVAILABLE->value,
-            TripRequestStatus::REJECTED_DEAN->value,
-            TripRequestStatus::REJECTED_VP->value,
-            TripRequestStatus::REJECTED_SUC->value,
-            TripRequestStatus::REJECTED->value,
-        ];
-
-        foreach ($rejectedStatuses as $rejected) {
-            if (str_contains($status, $rejected)) {
-                foreach ($steps as $index => $step) {
-                    if (str_contains($status, str_replace('Rejected ', '', $rejected))) {
-                        return $index;
-                    }
-                }
-            }
-        }
-
-        return null;
-    }
-
     public function isCancelled(): bool
     {
         return $this->request && $this->request->status === TripRequestStatus::CANCELLED->value;
@@ -151,9 +68,7 @@ class DocumentTrackingDetail extends Component
             'request' => $this->request,
             'approvals' => $this->approvals,
             'documents' => $this->documents,
-            'steps' => $this->getSteps(),
-            'currentStep' => $this->getCurrentStepIndex(),
-            'rejectedStep' => $this->getRejectedStepIndex(),
+            'steps' => $this->request->progressSteps(),
             'cancelled' => $this->isCancelled(),
         ]);
     }

@@ -150,10 +150,8 @@
         </div>
         <div class="card-body">
             <livewire:shared.progress-tracker 
-                :steps="{{ $steps }}"
-                :currentStep="{{ $currentStep }}"
-                :rejectedStep="{{ $rejectedStep }}"
-                :cancelled="{{ $cancelled }}"
+                :steps="$steps"
+                :cancelled="$cancelled"
             />
         </div>
     </div>

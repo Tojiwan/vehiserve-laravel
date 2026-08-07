@@ -27,113 +27,43 @@
     <!-- Request Info Card -->
     <div class="card">
         <div class="card-header">
-            <h2 class="text-lg font-semibold text-gray-900">Request Information</h2>
+            <h2 class="text-lg font-semibold text-gray-900">Travel Request</h2>
         </div>
         <div class="card-body">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div>
-                    <p class="text-sm text-gray-500">Request ID</p>
-                    <p class="font-semibold text-gray-900">#{{ $request->id }}</p>
-                </div>
-                <div>
-                    <p class="text-sm text-gray-500">
-                        {{ $request->inclusive_date ? 'Inclusive Date' : 'Request Date' }}
-                    </p>
-                    <p class="font-semibold text-gray-900">
-                        {{ $request->inclusive_date 
-                            ? $request->inclusive_date->format('M d, Y') 
-                            : $request->departure_date->format('M d, Y') }}
-                    </p>
-                </div>
-                <div>
-                    <p class="text-sm text-gray-500">
-                        {{ $request->inclusive_date ? 'Personnel Name' : 'Requesting Person' }}
-                    </p>
-                    <p class="font-semibold text-gray-900">
-                        {{ $request->inclusive_date ? $request->personnel_name : $request->requesting_person }}
-                    </p>
-                </div>
-                <div>
-                    <p class="text-sm text-gray-500">Destination</p>
-                    <p class="font-semibold text-gray-900">{{ $request->destination }}</p>
-                </div>
-            </div>
-
-            @if ($request->inclusive_date)
-            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div>
-                    <p class="text-sm text-gray-500">Official Station</p>
-                    <p class="font-semibold text-gray-900">{{ $request->official_station }}</p>
+                    <p class="text-sm text-gray-500">Request Date</p>
+                    <p class="font-semibold text-gray-900">{{ $request->request_date?->format('M d, Y') ?? '-' }}</p>
                 </div>
                 <div>
                     <p class="text-sm text-gray-500">Inclusive Date</p>
-                    <p class="font-semibold text-gray-900">{{ $request->inclusive_date->format('M d, Y') }}</p>
+                    <p class="font-semibold text-gray-900">{{ $request->inclusive_date?->format('M d, Y') ?? '-' }}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Personnel Name</p>
+                    <p class="font-semibold text-gray-900">{{ $request->personnel_name ?? '-' }}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Destination</p>
+                    <p class="font-semibold text-gray-900">{{ $request->destination ?? '-' }}</p>
                 </div>
             </div>
 
             <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
+                    <p class="text-sm text-gray-500">Official Station</p>
+                    <p class="font-semibold text-gray-900">{{ $request->official_station ?? '-' }}</p>
+                </div>
+                <div>
                     <p class="text-sm text-gray-500">Requesting For</p>
-                    <p class="font-semibold text-gray-900">{{ $request->requesting_for }}</p>
+                    <p class="font-semibold text-gray-900">{{ $request->requesting_for ?? '-' }}</p>
                 </div>
-            </div>
-            @else
-            <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div>
-                    <p class="text-sm text-gray-500">Request Date</p>
-                    <p class="font-semibold text-gray-900">{{ $request->request_date->format('M d, Y') }}</p>
-                </div>
-                <div>
-                    <p class="text-sm text-gray-500">Departure Date</p>
-                    <p class="font-semibold text-gray-900">{{ $request->departure_date->format('M d, Y') }}</p>
-                </div>
-                <div>
-                    <p class="text-sm text-gray-500">Return Date</p>
-                    <p class="font-semibold text-gray-900">{{ $request->return_date->format('M d, Y') }}</p>
-                </div>
-            </div>
-
-            <div class="mt-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div>
-                    <p class="text-sm text-gray-500">Departure Time</p>
-                    <p class="font-semibold text-gray-900">{{ $request->departure_time }}</p>
-                </div>
-                <div>
-                    <p class="text-sm text-gray-500">Return Date</p>
-                    <p class="font-semibold text-gray-900">{{ $request->return_date->format('M d, Y') }}</p>
-                </div>
-                <div>
-                    <p class="text-sm text-gray-500">Number of Passengers</p>
-                    <p class="font-semibold text-gray-900">{{ $request->num_passengers }}</p>
-                </div>
-            </div>
-
-            <div class="mt-6">
-                <p class="text-sm text-gray-500">Office/College</p>
-                <p class="font-semibold text-gray-900">{{ $request->office_college }}</p>
             </div>
 
             <div class="mt-6">
                 <p class="text-sm text-gray-500">Purpose</p>
-                <p class="text-gray-900">{{ $request->purpose }}</p>
+                <p class="text-gray-900">{{ $request->purpose ?? '-' }}</p>
             </div>
-
-            @if ($request->passengers->count() > 0)
-            <div class="mt-6">
-                <p class="text-sm text-gray-500">Passengers ({{ $request->passengers->count() }})</p>
-                <div class="flex flex-wrap gap-2 mt-2">
-                    @foreach ($request->passengers as $passenger)
-                    <span class="badge badge-primary">{{ $passenger->passenger_name }}</span>
-                    @endforeach
-                </div>
-            </div>
-            @endif
-
-            <div class="mt-6">
-                <p class="text-sm text-gray-500">Purpose</p>
-                <p class="text-gray-900">{{ $request->purpose }}</p>
-            </div>
-            @endif
 
             @if ($request->vehicle)
             <div class="mt-6 p-4 bg-gray-50 rounded-lg">
@@ -151,6 +81,55 @@
         </div>
     </div>
 
+    <!-- Vehicle Request Card -->
+    <div class="card">
+        <div class="card-header">
+            <h2 class="text-lg font-semibold text-gray-900">Vehicle Request</h2>
+        </div>
+        <div class="card-body">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div>
+                    <p class="text-sm text-gray-500">Departure Date</p>
+                    <p class="font-semibold text-gray-900">{{ $request->departure_date?->format('M d, Y') ?? '-' }}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Return Date</p>
+                    <p class="font-semibold text-gray-900">{{ $request->return_date?->format('M d, Y') ?? '-' }}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Departure Time</p>
+                    <p class="font-semibold text-gray-900">{{ $request->departure_time?->format('H:i') ?? '-' }}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-gray-500">Number of Passengers</p>
+                    <p class="font-semibold text-gray-900">{{ $request->num_passengers ?? '-' }}</p>
+                </div>
+            </div>
+
+            <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <p class="text-sm text-gray-500">Office/College</p>
+                    <p class="font-semibold text-gray-900">{{ $request->office_college ?? '-' }}</p>
+                </div>
+                @if ($request->passengers->count() > 0)
+                <div>
+                    <p class="text-sm text-gray-500">Passengers ({{ $request->passengers->count() }})</p>
+                    <div class="flex flex-wrap gap-2 mt-2">
+                        @foreach ($request->passengers as $passenger)
+                        <span class="badge badge-primary">{{ $passenger->passenger_name }}</span>
+                        @endforeach
+                    </div>
+                </div>
+                @endif
+            </div>
+
+            <div class="mt-6">
+                <p class="text-sm text-gray-500">Purpose</p>
+                <p class="text-gray-900">{{ $request->purpose ?? '-' }}</p>
+            </div>
+        </div>
+    </div>
+
     <!-- Progress Tracker -->
     <div class="card">
         <div class="card-header">
@@ -159,8 +138,6 @@
         <div class="card-body">
             <livewire:shared.progress-tracker 
                 :steps="$steps"
-                :currentStep="$currentStep"
-                :rejectedStep="$rejectedStep"
                 :cancelled="$cancelled"
             />
         </div>

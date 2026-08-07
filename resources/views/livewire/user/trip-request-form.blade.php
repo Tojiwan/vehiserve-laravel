@@ -26,6 +26,13 @@
                 <div class="border-b border-gray-200 pb-6">
                     <h3 class="text-lg font-semibold text-gray-900 mb-4">Travel Request Details</h3>
 
+                    <!-- Request Date -->
+                    <div class="form-group">
+                        <label class="label" for="request_date">Request Date <span class="text-red-500">*</span></label>
+                        <input type="date" id="request_date" wire:model="request_date" class="input" required>
+                        @error('request_date') <p class="error-message">{{ $message }}</p> @enderror
+                    </div>
+
                     <!-- Personnel Name -->
                     <div class="form-group">
                         <label class="label" for="personnel_name">Name of Personnel <span class="text-red-500">*</span></label>

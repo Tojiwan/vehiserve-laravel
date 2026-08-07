@@ -27,8 +27,10 @@ class TripAssignmentController extends Controller
         $vehicles = Vehicle::where('status', 'Available')->get();
         $drivers = Driver::where('status', 'Available')->get();
         $approvals = $trip->approvals()->with('user')->orderBy('id')->get();
+        $steps = $trip->progressSteps();
+        $cancelled = $trip->status === 'Cancelled by User';
 
-        return view('staff.trips.show', compact('trip', 'vehicles', 'drivers', 'approvals'));
+        return view('staff.trips.show', compact('trip', 'vehicles', 'drivers', 'approvals', 'steps', 'cancelled'));
     }
 
     public function assign(Request $request, TripRequest $trip)

@@ -32,6 +32,7 @@ class TripRequestService
             // Create the trip request
             $trip = TripRequest::create([
                 'user_ID' => auth()->id(),
+                'request_date' => $data['request_date'] ?? now()->toDateString(),
                 'personnel_name' => $data['personnel_name'],
                 'official_station' => $data['official_station'],
                 'destination' => $data['destination'],
@@ -156,6 +157,7 @@ class TripRequestService
 
             // Update trip request
             $trip->update([
+                'request_date' => $data['request_date'] ?? $trip->request_date,
                 'personnel_name' => $data['personnel_name'],
                 'official_station' => $data['official_station'],
                 'destination' => $data['destination'],

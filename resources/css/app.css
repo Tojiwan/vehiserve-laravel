@@ -254,11 +254,11 @@
     }
 
     .progress-step-circle.current {
-        @apply bg-red-600 border-red-600 text-white ring-4 ring-red-200;
+        @apply bg-amber-400 border-amber-400 text-white ring-4 ring-amber-200;
     }
 
     .progress-step-circle.pending {
-        @apply bg-white border-gray-200 text-gray-400;
+        @apply bg-gray-100 border-gray-300 text-gray-400;
     }
 
     .progress-step-label {

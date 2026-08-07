@@ -6,7 +6,6 @@ use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Livewire\WithPagination;
 use App\Models\TripRequest;
-use App\Enums\TripRequestStatus;
 use App\Services\TripRequestWorkflowService;
 
 #[Layout('layouts.user')]
@@ -32,24 +31,14 @@ class DocumentTracking extends Component
         }
     }
 
-    public function getStatusEnum($status): ?TripRequestStatus
+    public function updatedStatusFilter(): void
     {
-        return TripRequestStatus::tryFrom($status);
+        $this->resetPage();
     }
 
-    public function getStepIndex(string $status): int
+    public function updatedSortField(): void
     {
-        return TripRequestStatus::tryFrom($status)?->getStepIndex() ?? 0;
-    }
-
-    public function getRejectedStepIndex(string $status): ?int
-    {
-        return TripRequestStatus::tryFrom($status)?->getRejectedStepIndex() ?? null;
-    }
-
-    public function outcomeLabel(string $status): ?string
-    {
-        return TripRequestStatus::tryFrom($status)?->outcomeLabel();
+        $this->resetPage();
     }
 
     public function isCancellable(string $status): bool
@@ -71,7 +60,7 @@ class DocumentTracking extends Component
     public function getTripRequestsProperty()
     {
         return TripRequest::where('user_ID', auth()->id())
-            ->where('status', '!=', 'Cancelled by User')
+            ->with('approvals')
             ->when($this->search, function ($query) {
                 $query->where(function ($q) {
                     $q->where('personnel_name', 'like', "%{$this->search}%")
